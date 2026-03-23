@@ -3,7 +3,7 @@ import { useAuth } from '../App'
 import styles from './Settings.module.css'
 
 export default function Settings() {
-  const { user, logout } = useAuth()
+  const { user, logout, navigateTo } = useAuth()
   const [settings, setSettings] = useState({
     theme: 'light',
     notifications: true,
@@ -51,9 +51,40 @@ export default function Settings() {
           <span className={styles.wordmark}>SETTINGS</span>
           <span className={styles.userBadge}>{user?.name?.toUpperCase()}</span>
         </div>
-        <button className="secondary" onClick={logout} style={{ fontSize: '0.7rem', padding: '6px 14px' }}>
-          Sign Out
-        </button>
+        <nav className={styles.nav}>
+          <button 
+            className={styles.navBtn}
+            onClick={() => navigateTo('dashboard')}
+          >
+            Dashboard
+          </button>
+          <button 
+            className={styles.navBtn}
+            onClick={() => navigateTo('profile')}
+          >
+            Profile
+          </button>
+          <button 
+            className={styles.navBtn}
+            onClick={() => navigateTo('settings')}
+            style={{ background: '#000', color: '#fff' }}
+          >
+            Settings
+          </button>
+          <button 
+            className={styles.navBtn}
+            onClick={() => navigateTo('about')}
+          >
+            About
+          </button>
+          <button 
+            className="secondary" 
+            onClick={logout} 
+            style={{ fontSize: '0.7rem', padding: '6px 14px' }}
+          >
+            Sign Out
+          </button>
+        </nav>
       </header>
 
       <main className={styles.main}>

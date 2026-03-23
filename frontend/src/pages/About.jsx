@@ -2,7 +2,7 @@ import { useAuth } from '../App'
 import styles from './About.module.css'
 
 export default function About() {
-  const { user, logout } = useAuth()
+  const { user, logout, navigateTo } = useAuth()
 
   return (
     <div className={styles.shell + ' page-fade'}>
@@ -12,9 +12,40 @@ export default function About() {
           {user && <span className={styles.userBadge}>{user.name?.toUpperCase()}</span>}
         </div>
         {user && (
-          <button className="secondary" onClick={logout} style={{ fontSize: '0.7rem', padding: '6px 14px' }}>
-            Sign Out
-          </button>
+          <nav className={styles.nav}>
+            <button 
+              className={styles.navBtn}
+              onClick={() => navigateTo('dashboard')}
+            >
+              Dashboard
+            </button>
+            <button 
+              className={styles.navBtn}
+              onClick={() => navigateTo('profile')}
+            >
+              Profile
+            </button>
+            <button 
+              className={styles.navBtn}
+              onClick={() => navigateTo('settings')}
+            >
+              Settings
+            </button>
+            <button 
+              className={styles.navBtn}
+              onClick={() => navigateTo('about')}
+              style={{ background: '#000', color: '#fff' }}
+            >
+              About
+            </button>
+            <button 
+              className="secondary" 
+              onClick={logout} 
+              style={{ fontSize: '0.7rem', padding: '6px 14px' }}
+            >
+              Sign Out
+            </button>
+          </nav>
         )}
       </header>
 
