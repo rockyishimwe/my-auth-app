@@ -4,34 +4,35 @@ const errorHandler = (err, req, res, next) => {
   if (err.name === 'ValidationError') {
     return res.status(400).json({
       message: 'Validation error',
-      errors: err.details?.map(d => d.message) || [err.message]
-    })
+      errors: Object.values(err.errors).map(e => e.message),
+    });
   }
 
-  // Mongoose bad ObjectId (Fixed: check err.name, not err.message)
+  // Mongoose bad ObjectId
   if (err.name === 'CastError') {
     return res.status(400).json({
-      message: 'Invalid ID format'
-    })
+      message: 'Invalid ID format',
+    });
   }
 
   // Mongoose duplicate key error
   if (err.code === 11000) {
+    const field = Object.keys(err.keyValue)[0];
     return res.status(400).json({
-      message: 'Email already registered'
-    })
+      message: `${field} already exists`,
+    });
   }
 
   // Default error
-  const statusCode = res.statusCode !== 200 ? res.statusCode : 500
-  res.status(statusCode)
+  const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
+  res.status(statusCode);
 
   res.json({
     message: err.message,
-    stack: process.env.NODE_ENV === 'production' ? null : err.stack
-  })
-}
+    stack: process.env.NODE_ENV === 'production' ? null : err.stack,
+  });
+};
 
 module.exports = {
-  errorHandler
-}
+  errorHandler,
+};

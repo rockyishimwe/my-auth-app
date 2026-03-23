@@ -1,25 +1,28 @@
-const mongoose = require('mongoose')
+const { Schema, model, models } = require('mongoose');
 
-const userSchema = mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, 'Please add a name']
+const userSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, 'Please add a name'],
+    },
+    email: {
+      type: String,
+      required: [true, 'Please add an email'],
+      unique: true,
+      lowercase: true,
+      trim: true,
+      match: [/^\S+@\S+\.\S+$/, 'Please add a valid email'],
+    },
+    password: {
+      type: String,
+      required: [true, 'Please add a password'],
+      minlength: [6, 'Password must be at least 6 characters'],
+    },
   },
-  email: {
-    type: String,
-    required: [true, 'Please add an email'],
-    unique: true,
-    lowercase: true,
-    trim: true
-  },
-  password: {
-    type: String,
-    required: [true, 'Please add a password'],
+  {
+    timestamps: true,
   }
-},
-{
-  timestamps: true
-})
+);
 
-// Fixed typo: was 'USer', now 'User'
-module.exports = mongoose.model('User', userSchema)
+module.exports = models.User || model('User', userSchema);

@@ -1,13 +1,22 @@
-const joi = require('joi');
-const goalValidationSchema = joi.object({
-    user:joi.string().required().messages({
-        'string.base':"User ID should be a string",
-        'any.required':"user ID is required"
+const Joi = require('joi');
+
+const goalValidationSchema = Joi.object({
+  user: Joi.string()
+    .regex(/^[0-9a-fA-F]{24}$/)
+    .required()
+    .messages({
+      'string.pattern.base': 'User ID must be a valid MongoDB ObjectId',
+      'any.required': 'User ID is required',
     }),
-    text:joi.string().required().trim().messages({
-        'string.base':"Text should be a string",
-        'string.empty':"Text cannot be empty",
-        'any.required':"please add a text value"
-    })
+  text: Joi.string()
+    .min(1)
+    .trim()
+    .required()
+    .messages({
+      'string.base': 'Text should be a string',
+      'string.empty': 'Text cannot be empty',
+      'any.required': 'Please add a text value',
+    }),
 });
+
 module.exports = goalValidationSchema;
