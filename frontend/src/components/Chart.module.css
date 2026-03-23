@@ -1,0 +1,55 @@
+.chartContainer {
+  background: #fff;
+  border: 2px solid #000;
+  padding: 16px;
+  transition: background 0.1s;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.chartContainer:hover {
+  background: #f0f0f0;
+}
+
+.chartTitle {
+  margin: 0 0 16px 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #000;
+}
+
+.chartWrapper {
+  position: relative;
+  height: 250px;
+  width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .chartContainer {
+    padding: 14px;
+  }
+  
+  .chartWrapper {
+    height: 200px;
+  }
+  
+  .chartTitle {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .chartContainer {
+    padding: 12px;
+  }
+  
+  .chartWrapper {
+    height: 180px;
+  }
+  
+  .chartTitle {
+    font-size: 0.7rem;
+  }
+}

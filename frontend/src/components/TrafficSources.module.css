@@ -1,0 +1,110 @@
+.trafficSources {
+  background: #fff;
+  border: 2px solid #000;
+  padding: 16px;
+  margin-bottom: 16px;
+  transition: background 0.1s;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.trafficSources:hover {
+  background: #f0f0f0;
+}
+
+.title {
+  margin: 0 0 16px 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #000;
+}
+
+.sourcesList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sourceItem {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sourceHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sourceInfo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sourceDot {
+  width: 8px;
+  height: 8px;
+  border: 2px solid #000;
+  flex-shrink: 0;
+  background: #000;
+}
+
+.sourceName {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #000;
+}
+
+.sourcePercentage {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #888;
+}
+
+.progressBar {
+  width: 100%;
+  height: 6px;
+  background: #f0f0f0;
+  border: 1px solid #000;
+  position: relative;
+}
+
+.progressFill {
+  height: 100%;
+  background: #000;
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .trafficSources {
+    padding: 14px;
+  }
+  
+  .title {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .trafficSources {
+    padding: 12px;
+  }
+  
+  .title {
+    font-size: 0.7rem;
+  }
+  
+  .sourceName,
+  .sourcePercentage {
+    font-size: 0.65rem;
+  }
+}

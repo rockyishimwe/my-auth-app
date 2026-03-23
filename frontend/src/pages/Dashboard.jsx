@@ -5,7 +5,7 @@ import GoalItem from '../components/GoalItem'
 import styles from './Dashboard.module.css'
 
 export default function Dashboard() {
-  const { user, logout } = useAuth()
+  const { user, logout, navigateTo } = useAuth()
   const [goals, setGoals] = useState([])
   const [newText, setNewText] = useState('')
   const [loadingGoals, setLoadingGoals] = useState(true)
@@ -62,9 +62,40 @@ export default function Dashboard() {
           <span className={styles.wordmark}>GOALS</span>
           <span className={styles.userBadge}>{user?.name?.toUpperCase()}</span>
         </div>
-        <button className="secondary" onClick={logout} style={{ fontSize: '0.7rem', padding: '6px 14px' }}>
-          Sign Out
-        </button>
+        <nav className={styles.nav}>
+          <button 
+            className={styles.navBtn} 
+            onClick={() => navigateTo('dashboard')}
+            style={{ background: '#000', color: '#fff' }}
+          >
+            Dashboard
+          </button>
+          <button 
+            className={styles.navBtn}
+            onClick={() => navigateTo('profile')}
+          >
+            Profile
+          </button>
+          <button 
+            className={styles.navBtn}
+            onClick={() => navigateTo('settings')}
+          >
+            Settings
+          </button>
+          <button 
+            className={styles.navBtn}
+            onClick={() => navigateTo('about')}
+          >
+            About
+          </button>
+          <button 
+            className="secondary" 
+            onClick={logout} 
+            style={{ fontSize: '0.7rem', padding: '6px 14px' }}
+          >
+            Sign Out
+          </button>
+        </nav>
       </header>
 
       <main className={styles.main}>
