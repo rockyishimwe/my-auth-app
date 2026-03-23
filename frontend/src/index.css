@@ -1,0 +1,142 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --black: #000000;
+  --white: #ffffff;
+  --gray: #888888;
+  --light: #f0f0f0;
+  --border: 2px solid #000;
+  --border-thin: 1px solid #000;
+  --font: 'JetBrains Mono', monospace;
+}
+
+html {
+  font-size: 14px;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--white);
+  color: var(--black);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+a {
+  color: var(--black);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+a:hover {
+  background: var(--black);
+  color: var(--white);
+  text-decoration: none;
+}
+
+button {
+  font-family: var(--font);
+  cursor: pointer;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  border: var(--border);
+  background: var(--black);
+  color: var(--white);
+  padding: 10px 20px;
+  transition: background 0.1s, color 0.1s;
+  outline: none;
+}
+
+button:hover {
+  background: var(--white);
+  color: var(--black);
+}
+
+button:active {
+  transform: translate(1px, 1px);
+}
+
+button.secondary {
+  background: var(--white);
+  color: var(--black);
+}
+
+button.secondary:hover {
+  background: var(--black);
+  color: var(--white);
+}
+
+button.danger {
+  background: var(--white);
+  color: var(--black);
+  border: var(--border);
+}
+
+button.danger:hover {
+  background: var(--black);
+  color: var(--white);
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+input, textarea {
+  font-family: var(--font);
+  font-size: 0.9rem;
+  border: var(--border);
+  background: var(--white);
+  color: var(--black);
+  padding: 10px 12px;
+  width: 100%;
+  outline: none;
+  transition: background 0.1s;
+}
+
+input:focus, textarea:focus {
+  background: var(--light);
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--gray);
+  font-style: italic;
+}
+
+label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.error-msg {
+  font-size: 0.78rem;
+  color: var(--black);
+  border: var(--border-thin);
+  border-left: 4px solid var(--black);
+  padding: 8px 12px;
+  margin-top: 12px;
+  background: var(--light);
+}
+
+.page-fade {
+  animation: fadeIn 0.2s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
