@@ -67,21 +67,21 @@ export default function Landing() {
                   <h2 className={styles.sectionTitle}>Features</h2>
                   <div className={styles.featuresGrid}>
                     <div className={styles.featureCard}>
-                      <div className={styles.featureIcon}>📝</div>
+                      <div className={styles.featureIcon}></div>
                       <h3 className={styles.featureTitle}>Simple Goal Tracking</h3>
                       <p className={styles.featureDescription}>
                         Add, edit, and delete your goals with a clean, minimalist interface.
                       </p>
                     </div>
                     <div className={styles.featureCard}>
-                      <div className={styles.featureIcon}>🎯</div>
+                      <div className={styles.featureIcon}></div>
                       <h3 className={styles.featureTitle}>Stay Focused</h3>
                       <p className={styles.featureDescription}>
                         Remove distractions and focus on what truly matters to you.
                       </p>
                     </div>
                     <div className={styles.featureCard}>
-                      <div className={styles.featureIcon}>📊</div>
+                      <div className={styles.featureIcon}></div>
                       <h3 className={styles.featureTitle}>Track Progress</h3>
                       <p className={styles.featureDescription}>
                         Monitor your achievements and see how far you've come.

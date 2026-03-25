@@ -79,28 +79,28 @@ export default function About() {
           <h2 className={styles.sectionTitle}>Features</h2>
           <div className={styles.features}>
             <div className={styles.feature}>
-              <div className={styles.featureIcon}>📝</div>
+              <div className={styles.featureIcon}></div>
               <h3 className={styles.featureTitle}>Simple Goal Management</h3>
               <p className={styles.featureText}>
                 Add, edit, and delete goals with a clean, intuitive interface.
               </p>
             </div>
             <div className={styles.feature}>
-              <div className={styles.featureIcon}>🎯</div>
+              <div className={styles.featureIcon}></div>
               <h3 className={styles.featureTitle}>Minimalist Design</h3>
               <p className={styles.featureText}>
                 Black and white aesthetic that helps you focus on your goals.
               </p>
             </div>
             <div className={styles.feature}>
-              <div className={styles.featureIcon}>🔒</div>
+              <div className={styles.featureIcon}></div>
               <h3 className={styles.featureTitle}>Secure & Private</h3>
               <p className={styles.featureText}>
                 Your data is encrypted and kept private. No tracking, no ads.
               </p>
             </div>
             <div className={styles.feature}>
-              <div className={styles.featureIcon}>⚡</div>
+              <div className={styles.featureIcon}></div>
               <h3 className={styles.featureTitle}>Fast & Responsive</h3>
               <p className={styles.featureText}>
                 Built with modern web technologies for a smooth experience.
@@ -169,7 +169,8 @@ export default function About() {
               </div>
               <div className={styles.contactItem}>
                 <span className={styles.contactLabel}>GitHub:</span>
-                <span className={styles.contactValue}>github.com/goals-app</span>
+                <span className={styles.contactValue}><github className="com" />
+                <rockyishimwe />goals-app</span>
               </div>
               <div className={styles.contactItem}>
                 <span className={styles.contactLabel}>Twitter:</span>
@@ -182,7 +183,7 @@ export default function About() {
         <section className={styles.footer}>
           <div className={styles.footerContent}>
             <p className={styles.footerText}>
-              © 2024 GOALS. Built with ❤️ using the MERN stack.
+              © 2025 GOALS. Built with  using the MERN stack.
             </p>
             <div className={styles.footerLinks}>
               <a href="#" className={styles.footerLink}>Privacy Policy</a>
