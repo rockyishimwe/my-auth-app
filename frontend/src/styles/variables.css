@@ -1,0 +1,69 @@
+/**
+ * CSS Variables for GoalOS Design System
+ */
+
+:root {
+  /* Spacing Scale */
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 24px;
+  --spacing-6: 32px;
+  --spacing-7: 48px;
+
+  /* Font Sizes */
+  --font-xs: 11px;
+  --font-sm: 12px;
+  --font-base: 13px;
+  --font-lg: 14px;
+  --font-xl: 16px;
+  --font-2xl: 20px;
+  --font-3xl: 24px;
+  --font-4xl: 32px;
+
+  /* Colors */
+  --bg-primary: #0a0a0a;
+  --surface: #ffffff;
+  --bg: #f4f4f4;
+  --border: #e8e8e8;
+  --text: #111111;
+  --text-muted: #777777;
+  --shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --radius: 8px;
+
+  /* Context Colors */
+  --work: #3b82f6;
+  --health: #22c55e;
+  --finance: #f59e0b;
+  --education: #8b5cf6;
+  --personal: #ec4899;
+  --relationships: #ef4444;
+  --creativity: #f97316;
+  --travel: #06b6d4;
+
+  /* Priority Colors */
+  --priority-low: #94a3b8;
+  --priority-medium: #3b82f6;
+  --priority-high: #f59e0b;
+  --priority-critical: #ef4444;
+
+  /* Status Colors */
+  --status-active: #3b82f6;
+  --status-in-progress: #f59e0b;
+  --status-completed: #22c55e;
+  --status-archived: #94a3b8;
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.2s ease;
+  --transition-slow: 0.3s ease;
+
+  /* Z-Index */
+  --z-dropdown: 1000;
+  --z-modal: 1050;
+  --z-sidebar: 100;
+  --z-header: 50;
+  --z-toast: 2000;
+}

@@ -1,21 +1,125 @@
 {
-  "name": "goals-frontend",
-  "private": true,
+  "name": "goalos-frontend",
   "version": "1.0.0",
+  "description": "GoalOS Frontend - Professional Goal Management Platform",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint . --ext js,jsx --fix"
   },
+  "keywords": [
+    "goals",
+    "productivity",
+    "task-management",
+    "react",
+    "vite",
+    "css-modules"
+  ],
+  "author": "GoalOS Team",
+  "license": "MIT",
   "dependencies": {
-    "chart.js": "^4.5.1",
-    "react": "^18.3.1",
-    "react-chartjs-2": "^5.3.1",
-    "react-dom": "^18.3.1"
+    "axios": "^1.6.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.20.1"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^4.3.4",
-    "vite": "^6.0.5"
+    "@testing-library/jest-dom": "^6.1.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^14.5.1",
+    "@vitejs/plugin-react": "^4.2.0",
+    "eslint": "^8.55.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "jsdom": "^23.0.1",
+    "vite": "^5.0.8",
+    "vitest": "^1.0.8"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "es2020": true,
+      "node": true
+    },
+    "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:react/jsx-runtime",
+      "plugin:react-hooks/recommended"
+    ],
+    "ignorePatterns": [
+      "dist",
+      ".eslintrc.cjs"
+    ],
+    "parserOptions": {
+      "ecmaVersion": "latest",
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "settings": {
+      "react": {
+        "version": "18.2"
+      }
+    },
+    "plugins": [
+      "react-refresh"
+    ],
+    "rules": {
+      "react-refresh/only-export-components": [
+        "warn",
+        {
+          "allowConstantExport": true
+        }
+      ],
+      "no-unused-vars": "warn",
+      "no-console": "warn"
+    }
+  },
+  "viteConfig": {
+    "server": {
+      "port": 3000,
+      "proxy": {
+        "/api": {
+          "target": "http://localhost:8000",
+          "changeOrigin": true
+        }
+      }
+    },
+    "build": {
+      "outDir": "dist",
+      "sourcemap": true
+    }
+  },
+  "vitestConfig": {
+    "test": {
+      "environment": "jsdom",
+      "setupFiles": [
+        "./src/test/setup.js"
+      ],
+      "globals": true
+    },
+    "coverage": {
+      "reporter": [
+        "text",
+        "html"
+      ],
+      "exclude": [
+        "node_modules/",
+        "src/test/"
+      ]
+    }
   }
 }

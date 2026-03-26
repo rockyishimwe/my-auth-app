@@ -1,35 +1,121 @@
-const path = require('path');
 const express = require('express');
-const colors = require('colors');
-require('dotenv').config();
-const { errorHandler } = require('./middleware/errorMiddleware');
-const connectDB = require('./config/db');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const helmet = require('helmet');
+const morgan = require('morgan');
+const dotenv = require('dotenv');
 
-const port = process.env.PORT || 8000;
+// Load environment variables
+dotenv.config();
+
+// Import configurations
+const corsOptions = require('./config/cors');
+const { globalLimiter, authLimiter } = require('./config/rateLimit');
+const { createLogger } = require('./config/logger');
+const { errorHandler } = require('./utils/errorHandler');
+const { createIndexes } = require('./config/indexes');
+
+// Import routes
+const userRoutes = require('./routes/userRoutes');
+const goalRoutes = require('./routes/goalRoutes');
+const activityRoutes = require('./routes/activityRoutes');
+
+// Import middleware
+const { protect } = require('./middleware/authMiddleware');
+
+// Initialize express app
 const app = express();
 
-// Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+// Security middleware
+app.use(helmet());
 
-// Serve Swagger UI (static files if you have them)
-app.use('/api-docs', express.static(path.join(__dirname, 'swagger-ui')));
+// CORS configuration
+app.use(cors(corsOptions));
 
-// Routes
-app.use('/api/goals', require('./routes/goalRoutes'));
-app.use('/api/users', require('./routes/userRoutes'));
+// Rate limiting
+app.use(globalLimiter);
 
-// Error handler (must be after routes)
+// Body parsing middleware
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true }));
+
+// Logging middleware
+app.use(createLogger());
+
+// API routes
+app.use('/api/users', authLimiter, userRoutes);
+app.use('/api/goals', protect, goalRoutes);
+app.use('/api/activity', protect, activityRoutes);
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Server is running',
+    timestamp: new Date().toISOString()
+  });
+});
+
+// 404 handler
+app.use('*', (req, res) => {
+  res.status(404).json({
+    success: false,
+    message: 'Route not found'
+  });
+});
+
+// Error handling middleware
 app.use(errorHandler);
 
-// Connect to database and start server
-connectDB()
-  .then(() => {
-    app.listen(port, () => {
-      console.log(`Server started on port ${port}`.yellow.bold);
+// Database connection and server startup
+const startServer = async () => {
+  try {
+    // Connect to MongoDB
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log('✅ Connected to MongoDB');
+
+    // Create database indexes
+    await createIndexes();
+
+    // Start server
+    const PORT = process.env.PORT || 8000;
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+      console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
     });
-  })
-  .catch((err) => {
-    console.error(`Failed to connect to DB: ${err.message}`);
+  } catch (error) {
+    console.error('❌ Failed to start server:', error);
     process.exit(1);
-  });
+  }
+};
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (err) => {
+  console.error('❌ Unhandled Promise Rejection:', err);
+  process.exit(1);
+});
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (err) => {
+  console.error('❌ Uncaught Exception:', err);
+  process.exit(1);
+});
+
+// Graceful shutdown
+process.on('SIGTERM', async () => {
+  console.log('🔄 SIGTERM received, shutting down gracefully...');
+  
+  try {
+    await mongoose.connection.close();
+    console.log('✅ MongoDB connection closed');
+    process.exit(0);
+  } catch (error) {
+    console.error('❌ Error during shutdown:', error);
+    process.exit(1);
+  }
+});
+
+// Start the server
+startServer();
+
+module.exports = app;

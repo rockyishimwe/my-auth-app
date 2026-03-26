@@ -1,0 +1,244 @@
+/**
+ * Responsive Design Utilities
+ */
+
+/* Desktop First Approach */
+@media (min-width: 1025px) {
+  .desktop-only {
+    display: block;
+  }
+  
+  .mobile-only,
+  .tablet-only {
+    display: none;
+  }
+}
+
+/* Tablet Styles */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .tablet-only {
+    display: block;
+  }
+  
+  .mobile-only {
+    display: none;
+  }
+  
+  .desktop-only {
+    display: none;
+  }
+}
+
+/* Mobile Styles */
+@media (max-width: 767px) {
+  .mobile-only {
+    display: block;
+  }
+  
+  .desktop-only,
+  .tablet-only {
+    display: none;
+  }
+}
+
+/* Responsive Grid System */
+.grid {
+  display: grid;
+  gap: var(--spacing-3);
+}
+
+.grid-cols-1 {
+  grid-template-columns: 1fr;
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* Responsive Navigation */
+.nav-desktop {
+  display: flex;
+  gap: var(--spacing-2);
+}
+
+.nav-tablet {
+  display: flex;
+  gap: var(--spacing-1);
+  width: 48px;
+  overflow: hidden;
+}
+
+.nav-mobile {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg-primary);
+  z-index: var(--z-header);
+  padding: var(--spacing-3);
+}
+
+/* Responsive Sidebar */
+.sidebar-desktop {
+  width: 250px;
+}
+
+.sidebar-tablet {
+  width: 48px;
+}
+
+.sidebar-mobile {
+  transform: translateX(-100%);
+  transition: transform var(--transition-normal);
+}
+
+.sidebar-mobile.active {
+  transform: translateX(0);
+}
+
+/* Responsive Goal Cards */
+.goal-cards-desktop {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-3);
+}
+
+.goal-cards-tablet {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-2);
+}
+
+.goal-cards-mobile {
+  grid-template-columns: 1fr;
+  gap: var(--spacing-2);
+}
+
+/* Responsive Tables */
+.table-desktop {
+  display: table;
+  width: 100%;
+}
+
+.table-mobile {
+  display: none;
+}
+
+.table-card-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+/* Responsive Charts */
+.chart-desktop {
+  width: 100%;
+  height: 300px;
+}
+
+.chart-mobile {
+  width: 100%;
+  height: 200px;
+  overflow-x: auto;
+}
+
+/* Responsive Modals */
+.modal-desktop {
+  width: 600px;
+  max-width: 90vw;
+}
+
+.modal-mobile {
+  width: 95vw;
+  max-width: 400px;
+}
+
+/* Responsive Forms */
+.form-desktop {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: var(--spacing-3);
+}
+
+.form-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+/* Helper Classes */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-4);
+}
+
+.container-sm {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-3);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.hidden {
+  display: none;
+}
+
+.visible {
+  display: block;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
