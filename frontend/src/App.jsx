@@ -1,57 +1,129 @@
-import { useState, useEffect, createContext, useContext } from 'react'
-import Login from './pages/Login'
-import Register from './pages/Register'
-import Dashboard from './pages/Dashboard'
-import { authApi } from './api'
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { GoalsProvider } from './contexts/GoalsContext';
+import { UIProvider } from './contexts/UIContext';
+import Sidebar from './components/Sidebar';
+import Toast from './components/Toast';
+import './styles/variables.css';
 
-const AuthContext = createContext(null)
+// Import pages
+import LoginPage from './pages/LoginPage';
+import DashboardPage from './pages/DashboardPage';
+import GoalDetailPage from './pages/GoalDetailPage';
+import GoalsListPage from './pages/GoalsListPage';
+import ContextsPage from './pages/ContextsPage';
+import AnalyticsPage from './pages/AnalyticsPage';
+import ProfilePage from './pages/ProfilePage';
 
-export const useAuth = () => useContext(AuthContext)
+// Protected Route Component
+const ProtectedRoute = ({ children }) => {
+  const { user } = useAuth();
+  return user ? children : <Navigate to="/login" />;
+};
+
+// Public Route Component (redirect if authenticated)
+const PublicRoute = ({ children }) => {
+  const { user } = useAuth();
+  return !user ? children : <Navigate to="/dashboard" />;
+};
+
+// Layout Component
+const Layout = ({ children }) => {
+  const { sidebarCollapsed } = useUI();
+  
+  return (
+    <div style={{ display: 'flex', height: '100vh', fontFamily: 'JetBrains Mono, monospace' }}>
+      <Sidebar />
+      <main style={{
+        flex: 1,
+        marginLeft: sidebarCollapsed ? '48px' : '250px',
+        background: 'var(--bg)',
+        overflow: 'auto',
+        transition: 'margin-left var(--transition-normal)'
+      }}>
+        {children}
+      </main>
+      <Toast />
+    </div>
+  );
+};
+
+function AppContent() {
+  return (
+    <Router>
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/login" element={
+          <PublicRoute>
+            <LoginPage />
+          </PublicRoute>
+        } />
+        
+        {/* Protected Routes */}
+        <Route path="/dashboard" element={
+          <ProtectedRoute>
+            <Layout>
+              <DashboardPage />
+            </Layout>
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/goals" element={
+          <ProtectedRoute>
+            <Layout>
+              <GoalsListPage />
+            </Layout>
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/goals/:id" element={
+          <ProtectedRoute>
+            <Layout>
+              <GoalDetailPage />
+            </Layout>
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/contexts" element={
+          <ProtectedRoute>
+            <Layout>
+              <ContextsPage />
+            </Layout>
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/analytics" element={
+          <ProtectedRoute>
+            <Layout>
+              <AnalyticsPage />
+            </Layout>
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/profile" element={
+          <ProtectedRoute>
+            <Layout>
+              <ProfilePage />
+            </Layout>
+          </ProtectedRoute>
+        } />
+        
+        {/* Default redirect */}
+        <Route path="/" element={<Navigate to="/dashboard" />} />
+      </Routes>
+    </Router>
+  );
+}
 
 export default function App() {
-  const [user, setUser] = useState(null)
-  const [page, setPage] = useState('login')
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const token = localStorage.getItem('token')
-    if (!token) { setLoading(false); return }
-    authApi.me(token)
-      .then((u) => setUser({ ...u, token }))
-      .catch(() => localStorage.removeItem('token'))
-      .finally(() => setLoading(false))
-  }, [])
-
-  const login = (userData) => {
-    localStorage.setItem('token', userData.token)
-    setUser(userData)
-  }
-
-  const logout = () => {
-    localStorage.removeItem('token')
-    setUser(null)
-    setPage('login')
-  }
-
-  if (loading) {
-    return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
-        <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.8rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
-          Loading...
-        </span>
-      </div>
-    )
-  }
-
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
-      {user ? (
-        <Dashboard />
-      ) : page === 'login' ? (
-        <Login onSwitch={() => setPage('register')} />
-      ) : (
-        <Register onSwitch={() => setPage('login')} />
-      )}
-    </AuthContext.Provider>
-  )
+    <UIProvider>
+      <AuthProvider>
+        <GoalsProvider>
+          <AppContent />
+        </GoalsProvider>
+      </AuthProvider>
+    </UIProvider>
+  );
 }

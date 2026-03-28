@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useUI } from '../contexts';
+import { useUI } from '../contexts/UIContext';
 import '../styles/variables.css';
 
 export default function Toast() {

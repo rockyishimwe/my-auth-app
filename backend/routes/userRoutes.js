@@ -1,9 +1,55 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 const { successResponse, errorResponse } = require('../utils/response');
 const { protect } = require('../middleware/authMiddleware');
+
+// Generate JWT Token
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
+};
+
+// @desc    Register user (alternative route)
+// @route   POST /api/users
+// @access   Public
+router.post('/', async (req, res, next) => {
+  try {
+    const { name, email, password } = req.body;
+
+    // Check if user exists
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      return res.status(400).json(errorResponse('User already exists'));
+    }
+
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Create user
+    const user = await User.create({
+      name,
+      email,
+      password: hashedPassword
+    });
+
+    const token = generateToken(user._id);
+
+    res.status(201).json(successResponse({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      avatarColor: user.avatarColor,
+      token
+    }, 'User registered successfully'));
+  } catch (error) {
+    next(error);
+  }
+});
 
 // @desc    Register user
 // @route   POST /api/users/register
@@ -48,6 +94,9 @@ router.post('/register', async (req, res, next) => {
 // @access   Public
 router.post('/login', async (req, res, next) => {
   try {
+    console.log('LOGIN HIT — body:', req.body);
+    console.log('Headers:', req.headers['content-type']);
+    
     const { email, password } = req.body;
 
     // Check for user
@@ -114,15 +163,5 @@ router.put('/profile', protect, async (req, res, next) => {
     next(error);
   }
 });
-
-// Helper function to generate JWT
-const generateToken = (id) => {
-  const jwt = require('jsonwebtoken');
-  return jwt.sign(
-    { id },
-    process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRES_IN }
-  );
-};
 
 module.exports = router;

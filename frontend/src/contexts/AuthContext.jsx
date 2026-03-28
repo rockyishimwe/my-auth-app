@@ -1,67 +1,126 @@
 import { createContext, useContext, useReducer } from 'react';
 import { authService } from '../services/api';
+import PropTypes from "prop-types";
 
+
+// ─────────────────────────────────────────────
 // Initial state
+// ─────────────────────────────────────────────
+
 const initialState = {
-  user: null,
-  token: localStorage.getItem('token'),
-  loading: false
+  user:    null,
+  token:   localStorage.getItem('token'),
+  loading: false,
+  error:   null
 };
 
+// ─────────────────────────────────────────────
 // Action types
-const LOGIN = 'LOGIN';
-const LOGOUT = 'LOGOUT';
+// ─────────────────────────────────────────────
+
+const SET_LOADING    = 'SET_LOADING';
+const SET_ERROR      = 'SET_ERROR';
+const LOGIN          = 'LOGIN';
+const LOGOUT         = 'LOGOUT';
 const UPDATE_PROFILE = 'UPDATE_PROFILE';
 
+// ─────────────────────────────────────────────
 // Reducer
+// ─────────────────────────────────────────────
 const authReducer = (state, action) => {
   switch (action.type) {
+    case SET_LOADING:
+      return { ...state, loading: action.payload };
+
+    case SET_ERROR:
+      return { ...state, error: action.payload, loading: false };
+
     case LOGIN:
       return {
         ...state,
-        user: action.payload.user,
-        token: action.payload.token,
-        loading: false
+        user:    action.payload.user,
+        token:   action.payload.token,
+        loading: false,
+        error:   null
       };
-    
+
     case LOGOUT:
       return {
         ...state,
-        user: null,
-        token: null,
-        loading: false
+        user:    null,
+        token:   null,
+        loading: false,
+        error:   null
       };
-    
+
     case UPDATE_PROFILE:
       return {
         ...state,
         user: { ...state.user, ...action.payload }
       };
-    
+
     default:
       return state;
   }
 };
 
-// Create context
+// ─────────────────────────────────────────────
+// Context
+// ─────────────────────────────────────────────
+
 const AuthContext = createContext(null);
 
-// Provider component
+// ─────────────────────────────────────────────
+// Provider
+// ─────────────────────────────────────────────
+
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
-  // Actions
   const login = async (credentials) => {
-    dispatch({ type: LOGIN, payload: { loading: true } });
+    dispatch({ type: SET_LOADING, payload: true });
+    dispatch({ type: SET_ERROR,   payload: null });
     try {
       const response = await authService.login(credentials);
-      localStorage.setItem('token', response.data.token);
-      dispatch({
-        type: LOGIN,
-        payload: { user: response.data, token: response.data.token, loading: false }
-      });
+      console.log('Login response:', response); // Debug log
+      console.log('Response data:', response.data); // Debug log
+      
+      // Handle different response structures
+      let user, token;
+      
+      if (response.data.data) {
+        // Structure: { success: true, data: { user, token } }
+        ({ user, token } = response.data.data);
+      } else if (response.data.user && response.data.token) {
+        // Structure: { user, token }
+        ({ user, token } = response.data;
+      } else {
+        // Direct structure: { user, token }
+        ({ user, token } = response.data;
+      }
+      
+      console.log('Extracted user:', user, 'token:', token); // Debug log
+      localStorage.setItem('token', token);
+      dispatch({ type: LOGIN, payload: { user, token } });
     } catch (error) {
-      dispatch({ type: LOGIN, payload: { loading: false } });
+      const message = error.response?.data?.message || 'Login failed';
+      console.log('Login error:', error); // Debug log
+      dispatch({ type: SET_ERROR, payload: message });
+      throw error;   // re-throw so the form can show the message
+    }
+  };
+
+  const register = async (userData) => {
+    dispatch({ type: SET_LOADING, payload: true });
+    dispatch({ type: SET_ERROR,   payload: null });
+    try {
+      const response = await authService.register(userData);
+      const { user, token } = response.data.data ?? response.data;
+      localStorage.setItem('token', token);
+      dispatch({ type: LOGIN, payload: { user, token } });
+    } catch (error) {
+      const message = error.response?.data?.message || 'Registration failed';
+      dispatch({ type: SET_ERROR, payload: message });
       throw error;
     }
   };
@@ -72,22 +131,29 @@ export const AuthProvider = ({ children }) => {
   };
 
   const updateProfile = async (userData) => {
+    dispatch({ type: SET_LOADING, payload: true });
     try {
       const response = await authService.updateProfile(userData);
-      dispatch({
-        type: UPDATE_PROFILE,
-        payload: response.data
-      });
+      const updated = response.data.data ?? response.data;
+      dispatch({ type: UPDATE_PROFILE, payload: updated });
     } catch (error) {
+      const message = error.response?.data?.message || 'Update failed';
+      dispatch({ type: SET_ERROR, payload: message });
       throw error;
+    } finally {
+      dispatch({ type: SET_LOADING, payload: false });
     }
   };
+
+  const clearError = () => dispatch({ type: SET_ERROR, payload: null });
 
   const value = {
     ...state,
     login,
+    register,
     logout,
-    updateProfile
+    updateProfile,
+    clearError
   };
 
   return (
@@ -97,13 +163,19 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// Custom hook
+// ─────────────────────────────────────────────
+// Hook
+// ─────────────────────────────────────────────
+
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
+  if (!context) throw new Error('useAuth must be used within an AuthProvider');
   return context;
+};
+
+// PropTypes for AuthProvider
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired
 };
 
 export default AuthContext;

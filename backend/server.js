@@ -8,6 +8,12 @@ const dotenv = require('dotenv');
 // Load environment variables
 dotenv.config();
 
+// Debug environment variables
+console.log('Environment variables loaded:');
+console.log('MONGO_URI:', process.env.MONGO_URI);
+console.log('PORT:', process.env.PORT);
+console.log('JWT_SECRET:', process.env.JWT_SECRET ? 'Set' : 'Not set');
+
 // Import configurations
 const corsOptions = require('./config/cors');
 const { globalLimiter, authLimiter } = require('./config/rateLimit');
@@ -43,6 +49,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(createLogger());
 
 // API routes
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', port: process.env.PORT });
+});
+
 app.use('/api/users', authLimiter, userRoutes);
 app.use('/api/goals', protect, goalRoutes);
 app.use('/api/activity', protect, activityRoutes);
@@ -77,12 +87,25 @@ const startServer = async () => {
     // Create database indexes
     await createIndexes();
 
-    // Start server
+    // Start server with error handling
     const PORT = process.env.PORT || 8000;
-    app.listen(PORT, () => {
+    const server = app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
       console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
+    }).on('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        console.error(`❌ Port ${PORT} is busy. Try: kill -9 $(lsof -ti:${PORT})`);
+        console.error('Or use a different port by setting PORT environment variable');
+      } else {
+        console.error('❌ Server error:', err);
+      }
+      process.exit(1);
     });
+
+    // Graceful shutdown
+    process.on('SIGTERM', () => server.close());
+    process.on('SIGINT', () => server.close());
+    
   } catch (error) {
     console.error('❌ Failed to start server:', error);
     process.exit(1);

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useGoals, useUI } from '../contexts';
+import { useGoals, useUI } from '../contexts/GoalsContext';
 import { goalsService } from '../services/api';
 import ProgressRing from '../components/ProgressRing';
 import MilestoneSection from '../components/MilestoneSection';
@@ -29,7 +29,9 @@ export default function GoalDetailPage() {
           description: response.data.description,
           context: response.data.context,
           priority: response.data.priority,
-          dueDate: response.data.dueDate ? new Date(response.data.dueDate).toISOString().split('T')[0] : '',
+          dueDate: response.data.dueDate
+            ? new Date(response.data.dueDate).toISOString().split('T')[0]
+            : '',
           tags: response.data.tags.join(', ')
         });
       } catch (error) {
@@ -42,7 +44,7 @@ export default function GoalDetailPage() {
     fetchGoal();
   }, [id]);
 
-  const handleUpdate = async (field, value) => {
+  const handleUpdate = (field, value) => {
     setEditForm({ ...editForm, [field]: value });
   };
 
@@ -68,7 +70,7 @@ export default function GoalDetailPage() {
     }
   };
 
-  const handleDelete = async () => {
+  const handleDelete = () => {
     openModal('confirmDelete', { goalId: id, goalTitle: goal.title });
   };
 
@@ -108,7 +110,7 @@ export default function GoalDetailPage() {
 
   const getStatusColor = (status) => {
     const colors = {
-      'active': 'var(--status-active)',
+      active: 'var(--status-active)',
       'in-progress': 'var(--status-in-progress)',
       completed: 'var(--status-completed)',
       archived: 'var(--status-archived)'
@@ -116,19 +118,22 @@ export default function GoalDetailPage() {
     return colors[status] || 'var(--text)';
   };
 
-  if (loading) {
-    return <LoadingState />;
-  }
+  if (loading) return <LoadingState />;
 
   if (!goal) {
-    return <div className="flex-center" style={{ height: '50vh' }}>Goal not found</div>;
+    return (
+      <div className="flex-center" style={{ height: '50vh' }}>
+        Goal not found
+      </div>
+    );
   }
 
   return (
     <div className="container">
-      {/* Breadcrumb Navigation */}
+
+      {/* Breadcrumb */}
       <nav className="flex" style={{ marginBottom: 'var(--spacing-4)' }}>
-        <button 
+        <button
           onClick={() => navigate('/dashboard')}
           style={{
             background: 'none',
@@ -145,9 +150,12 @@ export default function GoalDetailPage() {
       </nav>
 
       <div className="grid grid-cols-3" style={{ gap: 'var(--spacing-5)' }}>
-        {/* Goal Details */}
-        <div className="flex-col" style={{ gridColumn: 'span 2' }}>
-          <div className="flex-col" style={{ 
+
+        {/* ── Left column: details + progress ring ── */}
+        <div className="flex-col" style={{ gridColumn: 'span 2', gap: 'var(--spacing-4)' }}>
+
+          {/* Details card */}
+          <div style={{
             background: 'var(--surface)',
             border: '1px solid var(--border)',
             borderRadius: 'var(--radius)',
@@ -157,7 +165,7 @@ export default function GoalDetailPage() {
             <div className="flex-between" style={{ marginBottom: 'var(--spacing-3)' }}>
               <h2 style={{ fontSize: 'var(--font-xl)', margin: 0 }}>Goal Details</h2>
               {!editing && (
-                <button 
+                <button
                   onClick={() => setEditing(true)}
                   style={{
                     background: 'var(--work)',
@@ -166,8 +174,7 @@ export default function GoalDetailPage() {
                     padding: 'var(--spacing-2) var(--spacing-3)',
                     borderRadius: 'var(--radius)',
                     fontSize: 'var(--font-base)',
-                    cursor: 'pointer',
-                    transition: 'var(--transition-fast)'
+                    cursor: 'pointer'
                   }}
                 >
                   Edit Goal
@@ -176,12 +183,13 @@ export default function GoalDetailPage() {
             </div>
 
             {editing ? (
+              /* ── Edit form ── */
               <div className="flex-col" style={{ gap: 'var(--spacing-3)' }}>
                 <div>
-                  <label style={{ display: 'block', marginBottom: 'var(--spacing-1)', fontSize: 'var(--font-sm)', color: 'var(--text)' }}>
+                  <label style={{ display: 'block', marginBottom: 'var(--spacing-1)', fontSize: 'var(--font-sm)' }}>
                     Title
                   </label>
-                  <input 
+                  <input
                     type="text"
                     value={editForm.title}
                     onChange={(e) => handleUpdate('title', e.target.value)}
@@ -196,10 +204,10 @@ export default function GoalDetailPage() {
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', marginBottom: 'var(--spacing-1)', fontSize: 'var(--font-sm)', color: 'var(--text)' }}>
+                  <label style={{ display: 'block', marginBottom: 'var(--spacing-1)', fontSize: 'var(--font-sm)' }}>
                     Description
                   </label>
-                  <textarea 
+                  <textarea
                     value={editForm.description}
                     onChange={(e) => handleUpdate('description', e.target.value)}
                     rows={4}
@@ -216,10 +224,10 @@ export default function GoalDetailPage() {
 
                 <div className="grid grid-cols-2" style={{ gap: 'var(--spacing-3)' }}>
                   <div>
-                    <label style={{ display: 'block', marginBottom: 'var(--spacing-1)', fontSize: 'var(--font-sm)', color: 'var(--text)' }}>
+                    <label style={{ display: 'block', marginBottom: 'var(--spacing-1)', fontSize: 'var(--font-sm)' }}>
                       Context
                     </label>
-                    <select 
+                    <select
                       value={editForm.context}
                       onChange={(e) => handleUpdate('context', e.target.value)}
                       style={{
@@ -230,22 +238,17 @@ export default function GoalDetailPage() {
                         fontSize: 'var(--font-base)'
                       }}
                     >
-                      <option value="work">Work</option>
-                      <option value="health">Health</option>
-                      <option value="finance">Finance</option>
-                      <option value="education">Education</option>
-                      <option value="personal">Personal</option>
-                      <option value="relationships">Relationships</option>
-                      <option value="creativity">Creativity</option>
-                      <option value="travel">Travel</option>
+                      {['work','health','finance','education','personal','relationships','creativity','travel'].map(c => (
+                        <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>
+                      ))}
                     </select>
                   </div>
 
                   <div>
-                    <label style={{ display: 'block', marginBottom: 'var(--spacing-1)', fontSize: 'var(--font-sm)', color: 'var(--text)' }}>
+                    <label style={{ display: 'block', marginBottom: 'var(--spacing-1)', fontSize: 'var(--font-sm)' }}>
                       Priority
                     </label>
-                    <select 
+                    <select
                       value={editForm.priority}
                       onChange={(e) => handleUpdate('priority', e.target.value)}
                       style={{
@@ -256,19 +259,18 @@ export default function GoalDetailPage() {
                         fontSize: 'var(--font-base)'
                       }}
                     >
-                      <option value="low">Low</option>
-                      <option value="medium">Medium</option>
-                      <option value="high">High</option>
-                      <option value="critical">Critical</option>
+                      {['low','medium','high','critical'].map(p => (
+                        <option key={p} value={p}>{p.charAt(0).toUpperCase() + p.slice(1)}</option>
+                      ))}
                     </select>
                   </div>
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', marginBottom: 'var(--spacing-1)', fontSize: 'var(--font-sm)', color: 'var(--text)' }}>
-                      Due Date
-                    </label>
-                  <input 
+                  <label style={{ display: 'block', marginBottom: 'var(--spacing-1)', fontSize: 'var(--font-sm)' }}>
+                    Due Date
+                  </label>
+                  <input
                     type="date"
                     value={editForm.dueDate}
                     onChange={(e) => handleUpdate('dueDate', e.target.value)}
@@ -283,14 +285,14 @@ export default function GoalDetailPage() {
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', marginBottom: 'var(--spacing-1)', fontSize: 'var(--font-sm)', color: 'var(--text)' }}>
-                      Tags
-                    </label>
-                  <input 
+                  <label style={{ display: 'block', marginBottom: 'var(--spacing-1)', fontSize: 'var(--font-sm)' }}>
+                    Tags (comma-separated)
+                  </label>
+                  <input
                     type="text"
                     value={editForm.tags}
                     onChange={(e) => handleUpdate('tags', e.target.value)}
-                    placeholder="Enter tags separated by commas"
+                    placeholder="e.g. fitness, morning, q1"
                     style={{
                       width: '100%',
                       padding: 'var(--spacing-2)',
@@ -301,8 +303,8 @@ export default function GoalDetailPage() {
                   />
                 </div>
 
-                <div className="flex" style={{ gap: 'var(--spacing-2)', marginTop: 'var(--spacing-3)' }}>
-                  <button 
+                <div className="flex" style={{ gap: 'var(--spacing-2)', marginTop: 'var(--spacing-2)' }}>
+                  <button
                     onClick={handleSave}
                     style={{
                       background: 'var(--work)',
@@ -311,13 +313,12 @@ export default function GoalDetailPage() {
                       padding: 'var(--spacing-2) var(--spacing-3)',
                       borderRadius: 'var(--radius)',
                       fontSize: 'var(--font-base)',
-                      cursor: 'pointer',
-                      transition: 'var(--transition-fast)'
+                      cursor: 'pointer'
                     }}
                   >
                     Save Changes
                   </button>
-                  <button 
+                  <button
                     onClick={() => setEditing(false)}
                     style={{
                       background: 'var(--surface)',
@@ -326,8 +327,7 @@ export default function GoalDetailPage() {
                       padding: 'var(--spacing-2) var(--spacing-3)',
                       borderRadius: 'var(--radius)',
                       fontSize: 'var(--font-base)',
-                      cursor: 'pointer',
-                      transition: 'var(--transition-fast)'
+                      cursor: 'pointer'
                     }}
                   >
                     Cancel
@@ -335,8 +335,9 @@ export default function GoalDetailPage() {
                 </div>
               </div>
             ) : (
+              /* ── Read-only view ── */
               <div className="flex-col" style={{ gap: 'var(--spacing-3)' }}>
-                <div className="flex-between" style={{ marginBottom: 'var(--spacing-3)' }}>
+                <div className="flex-between">
                   <h3 style={{ fontSize: 'var(--font-lg)', margin: 0, color: getContextColor(goal.context) }}>
                     {goal.title}
                   </h3>
@@ -345,46 +346,39 @@ export default function GoalDetailPage() {
                   </div>
                 </div>
 
-                <div style={{ marginBottom: 'var(--spacing-2)' }}>
-                  <p style={{ color: 'var(--text)', lineHeight: '1.5' }}>
-                    {goal.description || 'No description provided'}
-                  </p>
-                </div>
+                <p style={{ color: 'var(--text)', lineHeight: '1.5', margin: 0 }}>
+                  {goal.description || 'No description provided'}
+                </p>
 
                 <div className="grid grid-cols-2" style={{ gap: 'var(--spacing-3)' }}>
                   <div>
-                    <span style={{ fontSize: 'var(--font-sm)', color: 'var(--text-muted)' }}>Context:</span>
+                    <span style={{ fontSize: 'var(--font-sm)', color: 'var(--text-muted)' }}>Context: </span>
                     <span style={{ color: getContextColor(goal.context), fontWeight: 'bold' }}>
                       {goal.context}
                     </span>
                   </div>
                   <div>
-                    <span style={{ fontSize: 'var(--font-sm)', color: 'var(--text-muted)' }}>Priority:</span>
+                    <span style={{ fontSize: 'var(--font-sm)', color: 'var(--text-muted)' }}>Priority: </span>
                     <span style={{ color: getPriorityColor(goal.priority), fontWeight: 'bold' }}>
                       {goal.priority}
                     </span>
                   </div>
-                </div>
-
-                <div className="grid grid-cols-2" style={{ gap: 'var(--spacing-3)' }}>
                   <div>
-                    <span style={{ fontSize: 'var(--font-sm)', color: 'var(--text-muted)' }}>Status:</span>
+                    <span style={{ fontSize: 'var(--font-sm)', color: 'var(--text-muted)' }}>Status: </span>
                     <span style={{ color: getStatusColor(goal.status), fontWeight: 'bold' }}>
                       {goal.status}
                     </span>
                   </div>
                   <div>
-                    <span style={{ fontSize: 'var(--font-sm)', color: 'var(--text-muted)' }}>Progress:</span>
-                    <span style={{ color: 'var(--text)', fontWeight: 'bold' }}>
-                      {goal.progress}%
-                    </span>
+                    <span style={{ fontSize: 'var(--font-sm)', color: 'var(--text-muted)' }}>Progress: </span>
+                    <span style={{ fontWeight: 'bold' }}>{goal.progress}%</span>
                   </div>
                 </div>
 
                 {goal.dueDate && (
                   <div>
-                    <span style={{ fontSize: 'var(--font-sm)', color: 'var(--text-muted)' }}>Due Date:</span>
-                    <span style={{ color: 'var(--text)', fontWeight: 'bold' }}>
+                    <span style={{ fontSize: 'var(--font-sm)', color: 'var(--text-muted)' }}>Due Date: </span>
+                    <span style={{ fontWeight: 'bold' }}>
                       {new Date(goal.dueDate).toLocaleDateString()}
                     </span>
                   </div>
@@ -392,10 +386,12 @@ export default function GoalDetailPage() {
 
                 {goal.tags && goal.tags.length > 0 && (
                   <div>
-                    <span style={{ fontSize: 'var(--font-sm)', color: 'var(--text-muted)' }}>Tags:</span>
+                    <span style={{ fontSize: 'var(--font-sm)', color: 'var(--text-muted)', display: 'block', marginBottom: 'var(--spacing-1)' }}>
+                      Tags:
+                    </span>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-1)' }}>
                       {goal.tags.map(tag => (
-                        <span 
+                        <span
                           key={tag}
                           style={{
                             background: 'var(--bg)',
@@ -412,12 +408,12 @@ export default function GoalDetailPage() {
                   </div>
                 )}
               </div>
-            )
+            )}
           </div>
 
           {/* Progress Ring */}
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <ProgressRing 
+            <ProgressRing
               progress={goal.progress}
               size={200}
               strokeWidth={8}
@@ -426,113 +422,69 @@ export default function GoalDetailPage() {
           </div>
         </div>
 
-        {/* Milestones */}
-        <div style={{ gridColumn: 'span 1' }}>
-          <MilestoneSection 
+        {/* ── Right column: milestones + notes ── */}
+        <div className="flex-col" style={{ gridColumn: 'span 1', gap: 'var(--spacing-4)' }}>
+          <MilestoneSection
             goalId={goal._id}
             milestones={goal.milestones || []}
           />
-        </div>
-
-        {/* Notes */}
-        <div style={{ gridColumn: 'span 1' }}>
-          <NotesSection 
+          <NotesSection
             goalId={goal._id}
             notes={goal.notes || []}
           />
         </div>
-      </div>
 
-      {/* Status Actions */}
-      <div className="flex-col" style={{ gridColumn: 'span 3' }}>
-        <div style={{ 
-          background: 'var(--surface)',
-          border: '1px solid var(--border)',
-          borderRadius: 'var(--radius)',
-          padding: 'var(--spacing-4)',
-          boxShadow: 'var(--shadow-md)'
-        }}>
-          <h3 style={{ fontSize: 'var(--font-lg)', margin: '0 0 var(--spacing-3)', color: 'var(--text)' }}>Status Actions</h3>
-          <div className="flex" style={{ gap: 'var(--spacing-2)' }}>
-            <button 
-              onClick={() => handleStatusChange('active')}
+        {/* ── Full-width: status actions ── */}
+        <div style={{ gridColumn: 'span 3' }}>
+          <div style={{
+            background: 'var(--surface)',
+            border: '1px solid var(--border)',
+            borderRadius: 'var(--radius)',
+            padding: 'var(--spacing-4)',
+            boxShadow: 'var(--shadow-md)'
+          }}>
+            <h3 style={{ fontSize: 'var(--font-lg)', margin: '0 0 var(--spacing-3)', color: 'var(--text)' }}>
+              Status Actions
+            </h3>
+
+            <div className="flex" style={{ gap: 'var(--spacing-2)' }}>
+              {['active', 'in-progress', 'completed', 'archived'].map(s => (
+                <button
+                  key={s}
+                  onClick={() => handleStatusChange(s)}
+                  style={{
+                    background: goal.status === s ? getStatusColor(s) : 'var(--surface)',
+                    color: goal.status === s ? 'white' : 'var(--text)',
+                    border: '1px solid var(--border)',
+                    padding: 'var(--spacing-2) var(--spacing-3)',
+                    borderRadius: 'var(--radius)',
+                    fontSize: 'var(--font-base)',
+                    cursor: 'pointer'
+                  }}
+                >
+                  {s.charAt(0).toUpperCase() + s.slice(1)}
+                </button>
+              ))}
+            </div>
+
+            <button
+              onClick={handleDelete}
               style={{
-                background: goal.status === 'active' ? 'var(--status-active)' : 'var(--surface)',
-                color: goal.status === 'active' ? 'white' : 'var(--text)',
-                border: '1px solid var(--border)',
+                background: 'var(--bg)',
+                color: 'var(--relationships)',
+                border: '1px solid var(--relationships)',
                 padding: 'var(--spacing-2) var(--spacing-3)',
                 borderRadius: 'var(--radius)',
                 fontSize: 'var(--font-base)',
                 cursor: 'pointer',
-                transition: 'var(--transition-fast)'
+                marginTop: 'var(--spacing-3)'
               }}
             >
-              Set Active
-            </button>
-            <button 
-              onClick={() => handleStatusChange('in-progress')}
-              style={{
-                background: goal.status === 'in-progress' ? 'var(--status-in-progress)' : 'var(--surface)',
-                color: goal.status === 'in-progress' ? 'white' : 'var(--text)',
-                border: '1px solid var(--border)',
-                padding: 'var(--spacing-2) var(--spacing-3)',
-                borderRadius: 'var(--radius)',
-                fontSize: 'var(--font-base)',
-                cursor: 'pointer',
-                transition: 'var(--transition-fast)'
-              }}
-            >
-              In Progress
-            </button>
-            <button 
-              onClick={() => handleStatusChange('completed')}
-              style={{
-                background: goal.status === 'completed' ? 'var(--status-completed)' : 'var(--surface)',
-                color: goal.status === 'completed' ? 'white' : 'var(--text)',
-                border: '1px solid var(--border)',
-                padding: 'var(--spacing-2) var(--spacing-3)',
-                borderRadius: 'var(--radius)',
-                fontSize: 'var(--font-base)',
-                cursor: 'pointer',
-                transition: 'var(--transition-fast)'
-              }}
-            >
-              Completed
-            </button>
-            <button 
-              onClick={() => handleStatusChange('archived')}
-              style={{
-                background: goal.status === 'archived' ? 'var(--status-archived)' : 'var(--surface)',
-                color: goal.status === 'archived' ? 'white' : 'var(--text)',
-                border: '1px solid var(--border)',
-                padding: 'var(--spacing-2) var(--spacing-3)',
-                borderRadius: 'var(--radius)',
-                fontSize: 'var(--font-base)',
-                cursor: 'pointer',
-                transition: 'var(--transition-fast)'
-              }}
-            >
-              Archived
+              Delete Goal
             </button>
           </div>
-
-          <button 
-            onClick={handleDelete}
-            style={{
-              background: 'var(--bg)',
-              color: 'var(--text)',
-              border: '1px solid var(--border)',
-              padding: 'var(--spacing-2) var(--spacing-3)',
-              borderRadius: 'var(--radius)',
-              fontSize: 'var(--font-base)',
-              cursor: 'pointer',
-              transition: 'var(--transition-fast)',
-              marginTop: 'var(--spacing-3)'
-            }}
-          >
-            Delete Goal
-          </button>
         </div>
+
       </div>
     </div>
   );

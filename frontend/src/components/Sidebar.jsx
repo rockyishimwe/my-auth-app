@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth, useUI } from '../contexts';
-import '../styles/variables.css';
+import { useAuth } from '../contexts/AuthContext';
+import { useUI } from '../contexts/GoalsContext';
 
 export default function Sidebar() {
   const { user, logout } = useAuth();
@@ -21,14 +21,14 @@ export default function Sidebar() {
   };
 
   const contextItems = [
-    { id: 'work', label: 'Work', color: 'var(--work)', icon: '💼' },
-    { id: 'health', label: 'Health', color: 'var(--health)', icon: '🏃' },
-    { id: 'finance', label: 'Finance', color: 'var(--finance)', icon: '💰' },
-    { id: 'education', label: 'Education', color: 'var(--education)', icon: '📚' },
-    { id: 'personal', label: 'Personal', color: 'var(--personal)', icon: '👤' },
-    { id: 'relationships', label: 'Relationships', color: 'var(--relationships)', icon: '❤️' },
-    { id: 'creativity', label: 'Creativity', color: 'var(--creativity)', icon: '🎨' },
-    { id: 'travel', label: 'Travel', color: 'var(--travel)', icon: '✈️' }
+    { id: 'work', label: 'Work', color: 'var(--work)', icon: '' },
+    { id: 'health', label: 'Health', color: 'var(--health)', icon: '' },
+    { id: 'finance', label: 'Finance', color: 'var(--finance)', icon: '' },
+    { id: 'education', label: 'Education', color: 'var(--education)', icon: '' },
+    { id: 'personal', label: 'Personal', color: 'var(--personal)', icon: '' },
+    { id: 'relationships', label: 'Relationships', color: 'var(--relationships)', icon: '' },
+    { id: 'creativity', label: 'Creativity', color: 'var(--creativity)', icon: '' },
+    { id: 'travel', label: 'Travel', color: 'var(--travel)', icon: '' }
   ];
 
   const navItems = [
@@ -117,7 +117,6 @@ export default function Sidebar() {
                 onClick={() => { handleNavigation(`/${item.id}`); toggleSidebar(); }}
                 style={{
                   width: '100%',
-                  background: 'none',
                   border: 'none',
                   color: 'white',
                   padding: 'var(--spacing-2)',
@@ -267,7 +266,6 @@ export default function Sidebar() {
             onClick={() => handleNavigation(`/${item.id}`)}
             style={{
               width: '100%',
-              background: 'none',
               border: 'none',
               color: 'white',
               padding: 'var(--spacing-2)',

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useGoals, useUI } from '../contexts';
+import { useGoals, useUI } from '../contexts/GoalsContext';
 import { goalsService } from '../services/api';
 import GoalCard from '../components/GoalCard';
 import GoalTable from '../components/GoalTable';
