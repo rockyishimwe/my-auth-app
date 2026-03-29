@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import { useAuth } from '../contexts/AuthContext';
-import { useUI } from '../contexts/GoalsContext';
+import { useUI } from '../contexts/UIContext';
 import { authService } from '../services/api';
 import '../styles/variables.css';
 

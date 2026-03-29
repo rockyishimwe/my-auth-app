@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { GoalsProvider, useGoals } from './contexts/GoalsContext';
-import { UIProvider, useUI } from './contexts/GoalsContext';
+import { UIProvider, useUI } from './contexts/UIContext';
 import Sidebar from './components/Sidebar';
 import Toast from './components/Toast';
 import './styles/variables.css';

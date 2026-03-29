@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Icon } from '@iconify/react';
 import { useAuth } from '../contexts/AuthContext';
-import { useUI } from '../contexts/GoalsContext';
+import { useUI } from '../contexts/UIContext';
 import '../styles/variables.css';
 
 export default function SettingsPage() {

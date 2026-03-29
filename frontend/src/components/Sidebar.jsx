@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { useAuth } from '../contexts/AuthContext';
-import { useUI } from '../contexts/GoalsContext';
+import { useUI } from '../contexts/UIContext';
 
 export default function Sidebar() {
   const { user, logout } = useAuth();
@@ -75,7 +75,7 @@ export default function Sidebar() {
           </div>
 
           {/* User Card */}
-          {user && (
+          {user && user.name && (
             <div 
               style={{
                 background: 'rgba(255, 255, 255, 0.1)',
@@ -99,7 +99,7 @@ export default function Sidebar() {
                     color: 'white'
                   }}
                 >
-                  {user.name.charAt(0).toUpperCase()}
+                  {user.name && user.name.charAt(0) ? user.name.charAt(0).toUpperCase() : '?'}
                 </div>
               </div>
               <div>
@@ -225,7 +225,7 @@ export default function Sidebar() {
       </div>
 
       {/* User Card */}
-      {user && (
+      {user && user.name && (
         <div 
           style={{
             background: 'rgba(255, 255, 255, 0.1)',
@@ -249,7 +249,7 @@ export default function Sidebar() {
                 color: 'white'
               }}
             >
-              {user.name.charAt(0).toUpperCase()}
+              {user.name && user.name.charAt(0) ? user.name.charAt(0).toUpperCase() : '?'}
             </div>
           </div>
           <div>

@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import { useUI } from '../contexts/GoalsContext';
+import { useUI } from '../contexts/UIContext';
 import '../styles/variables.css';
 
 export default function GoalCard({ goal, onUpdate, onDelete }) {

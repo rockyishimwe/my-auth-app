@@ -2,8 +2,8 @@ const Joi = require('joi');
 
 const userRegistrationValidation = Joi.object({
   name: Joi.string()
-    .min(2, 'Name must be at least 2 characters')
-    .max(50, 'Name must not exceed 50 characters')
+    .min(2)
+    .max(50)
     .required()
     .trim()
     .messages({
@@ -23,7 +23,7 @@ const userRegistrationValidation = Joi.object({
     }),
     
   password: Joi.string()
-    .min(6, 'Password must be at least 6 characters')
+    .min(6)
     .required()
     .messages({
       'string.empty': 'Password is required',
@@ -51,8 +51,8 @@ const userLoginValidation = Joi.object({
 
 const userUpdateValidation = Joi.object({
   name: Joi.string()
-    .min(2, 'Name must be at least 2 characters')
-    .max(50, 'Name must not exceed 50 characters')
+    .min(2)
+    .max(50)
     .optional()
     .trim()
     .messages({
@@ -78,13 +78,20 @@ const passwordUpdateValidation = Joi.object({
     }),
     
   newPassword: Joi.string()
-    .min(6, 'New password must be at least 6 characters')
+    .min(6)
     .required()
     .messages({
       'string.empty': 'New password is required',
       'string.min': 'New password must be at least 6 characters'
     })
 });
+
+module.exports = {
+  userRegistrationValidation,
+  userLoginValidation,
+  userUpdateValidation,
+  passwordUpdateValidation
+};
 
 module.exports = {
   userRegistrationValidation,

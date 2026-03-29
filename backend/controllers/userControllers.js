@@ -1,104 +1,284 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const User = require('../model/userModel');
-const asyncHandler = require('express-async-handler');
+const User = require('../models/userModel');
+const { AppError, errorHandler } = require('../utils/errorHandler');
+const { successResponse, paginatedResponse } = require('../utils/response');
+const { userRegistrationValidation, userLoginValidation, userUpdateValidation, passwordUpdateValidation } = require('../validations/userValidations');
 
-// Generate JWT Token
+/**
+ * Generate JWT Token
+ */
 const generateToken = (id) => {
   if (!process.env.JWT_SECRET) {
     throw new Error("JWT_SECRET is not defined in environment variables");
   }
   return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: '30d',
+    expiresIn: process.env.JWT_EXPIRES_IN || '30d',
   });
 };
 
-// @desc    Register new user
-// @route   POST /api/users
-// @access  Public
-const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
+/**
+ * Format user response (without password)
+ */
+const formatUserResponse = (user) => ({
+  _id: user._id,
+  name: user.name,
+  email: user.email,
+  avatarColor: user.avatarColor,
+  createdAt: user.createdAt
+});
 
-  if (!name || !email || !password) {
-    res.status(400);
-    throw new Error('Please add all fields');
-  }
+/**
+ * @route   POST /api/users/register
+ * @access  Public
+ */
+const registerUser = async (req, res, next) => {
+  try {
+    // Validate input
+    const { error, value } = userRegistrationValidation.validate(req.body);
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        message: error.details[0].message,
+        errors: [error.details[0].message]
+      });
+    }
 
-  // Check if user exists
-  const userExists = await User.findOne({ email });
-  if (userExists) {
-    res.status(400);
-    throw new Error('User already exists');
-  }
+    const { name, email, password } = value;
 
-  // Hash password
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
+    // Check if user already exists
+    const userExists = await User.findOne({ email: email.toLowerCase() });
+    if (userExists) {
+      return res.status(409).json({
+        success: false,
+        message: 'User with this email already exists',
+        errors: ['Email already registered']
+      });
+    }
 
-  // Create user
-  const user = await User.create({
-    name,
-    email,
-    password: hashedPassword,
-  });
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-  if (user) {
-    res.status(201).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      token: generateToken(user._id),
+    // Create user with random avatar color
+    const user = await User.create({
+      name,
+      email: email.toLowerCase(),
+      password: hashedPassword,
+      avatarColor: ['#3b82f6', '#22c55e', '#f59e0b', '#8b5cf6', '#ec4899', '#ef4444', '#f97316', '#06b6d4'][
+        Math.floor(Math.random() * 8)
+      ]
     });
-  } else {
-    res.status(400);
-    throw new Error('Invalid user data');
+
+    const token = generateToken(user._id);
+
+    return res.status(201).json(
+      successResponse(
+        {
+          user: formatUserResponse(user),
+          token
+        },
+        'User registered successfully'
+      )
+    );
+  } catch (error) {
+    next(error);
   }
-});
+};
 
-// @desc    Authenticate a user
-// @route   POST /api/users/login
-// @access  Public
-const loginUser = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
+/**
+ * @route   POST /api/users/login
+ * @access  Public
+ */
+const loginUser = async (req, res, next) => {
+  try {
+    // Validate input
+    const { error, value } = userLoginValidation.validate(req.body);
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        message: error.details[0].message,
+        errors: [error.details[0].message]
+      });
+    }
 
-  if (!email || !password) {
-    res.status(400);
-    throw new Error('Please provide email and password');
+    const { email, password } = value;
+
+    // Find user
+    const user = await User.findOne({ email: email.toLowerCase() });
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid email or password',
+        errors: ['Authentication failed']
+      });
+    }
+
+    // Check password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid email or password',
+        errors: ['Authentication failed']
+      });
+    }
+
+    const token = generateToken(user._id);
+
+    return res.status(200).json(
+      successResponse(
+        {
+          user: formatUserResponse(user),
+          token
+        },
+        'Login successful'
+      )
+    );
+  } catch (error) {
+    next(error);
   }
+};
 
-  // Check for user email
-  const user = await User.findOne({ email });
+/**
+ * @route   GET /api/users/me
+ * @access  Private
+ */
+const getMe = async (req, res, next) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: 'User not authorized'
+      });
+    }
 
-  if (user && (await bcrypt.compare(password, user.password))) {
-    res.json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      token: generateToken(user._id),
-    });
-  } else {
-    res.status(401);
-    throw new Error('Invalid credentials');
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    return res.status(200).json(
+      successResponse(formatUserResponse(user), 'User data retrieved')
+    );
+  } catch (error) {
+    next(error);
   }
-});
+};
 
-// @desc    Get user data
-// @route   GET /api/users/me
-// @access  Private
-const getMe = asyncHandler(async (req, res) => {
-  if (!req.user) {
-    res.status(401);
-    throw new Error("User not authorized");
+/**
+ * @route   PUT /api/users/profile
+ * @access  Private
+ */
+const updateProfile = async (req, res, next) => {
+  try {
+    // Validate profile updates (name, email)
+    if (req.body.name || req.body.email) {
+      const { error, value: updateValue } = userUpdateValidation.validate({
+        name: req.body.name,
+        email: req.body.email
+      });
+      if (error) {
+        return res.status(400).json({
+          success: false,
+          message: error.details[0].message,
+          errors: [error.details[0].message]
+        });
+      }
+    }
+    
+    // Validate password update if provided
+    let passwordValue = {};
+    if (req.body.currentPassword || req.body.password) {
+      const { error, value: pwValue } = passwordUpdateValidation.validate({
+        currentPassword: req.body.currentPassword,
+        newPassword: req.body.password
+      });
+      if (error) {
+        return res.status(400).json({
+          success: false,
+          message: error.details[0].message,
+          errors: [error.details[0].message]
+        });
+      }
+      passwordValue = pwValue;
+    }
+    
+    const value = {
+      name: req.body.name,
+      email: req.body.email,
+      currentPassword: passwordValue.currentPassword,
+      password: passwordValue.newPassword
+    };
+
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    const { name, email, currentPassword, password } = value;
+
+    // If updating password, verify current password
+    if (password) {
+      if (!currentPassword) {
+        return res.status(400).json({
+          success: false,
+          message: 'Current password is required to change password',
+          errors: ['currentPassword required']
+        });
+      }
+
+      const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
+      if (!isPasswordValid) {
+        return res.status(401).json({
+          success: false,
+          message: 'Current password is incorrect',
+          errors: ['Invalid current password']
+        });
+      }
+
+      // Hash new password
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(password, salt);
+    }
+
+    // Update name and email
+    if (name) user.name = name.trim();
+    if (email) {
+      // Check if email is already taken by another user
+      const existingUser = await User.findOne({
+        email: email.toLowerCase(),
+        _id: { $ne: user._id }
+      });
+      if (existingUser) {
+        return res.status(409).json({
+          success: false,
+          message: 'Email already in use',
+          errors: ['Email taken']
+        });
+      }
+      user.email = email.toLowerCase();
+    }
+
+    await user.save();
+
+    return res.status(200).json(
+      successResponse(formatUserResponse(user), 'Profile updated successfully')
+    );
+  } catch (error) {
+    next(error);
   }
-  res.status(200).json({
-    id: req.user._id,
-    name: req.user.name,
-    email: req.user.email,
-  });
-});
+};
 
 module.exports = {
   registerUser,
   loginUser,
   getMe,
+  updateProfile
 };

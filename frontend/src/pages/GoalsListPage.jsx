@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
-import { useGoals, useUI } from '../contexts/GoalsContext';
+import { useGoals } from '../contexts/GoalsContext';
+import { useUI } from '../contexts/UIContext';
 import GoalCard from '../components/GoalCard';
 import GoalTable from '../components/GoalTable';
 import EmptyState from '../components/EmptyState';

@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
-import { useGoals, useUI } from '../contexts/GoalsContext';
+import { useGoals } from '../contexts/GoalsContext';
+import { useUI } from '../contexts/UIContext';
 import { goalsService } from '../services/api';
 import ProgressRing from '../components/ProgressRing';
 import MilestoneSection from '../components/MilestoneSection';
