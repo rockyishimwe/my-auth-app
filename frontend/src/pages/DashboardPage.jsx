@@ -26,6 +26,10 @@ export default function DashboardPage() {
   };
 
   const handleUpdateGoal = async (id, goalData) => {
+    if (!id) {
+      addToast('error', 'Goal ID is missing, cannot update');
+      return;
+    }
     try {
       await updateGoal(id, goalData);
       addToast('success', 'Goal updated successfully');
@@ -35,6 +39,10 @@ export default function DashboardPage() {
   };
 
   const handleDeleteGoal = async (id) => {
+    if (!id) {
+      addToast('error', 'Goal ID is missing, cannot delete');
+      return;
+    }
     try {
       await deleteGoal(id);
       addToast('success', 'Goal deleted successfully');

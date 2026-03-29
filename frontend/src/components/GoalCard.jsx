@@ -41,6 +41,9 @@ export default function GoalCard({ goal, onUpdate, onDelete }) {
 
   const handleEdit = () => {
     // For now, just show a simple alert. In a real app, this would open an edit modal/form
+    if (!goal._id) {
+      return;
+    }
     const newTitle = prompt('Edit goal title:', goal.title);
     if (newTitle && newTitle !== goal.title) {
       onUpdate(goal._id, { title: newTitle });
@@ -48,6 +51,9 @@ export default function GoalCard({ goal, onUpdate, onDelete }) {
   };
 
   const handleDelete = () => {
+    if (!goal._id) {
+      return;
+    }
     if (window.confirm(`Are you sure you want to delete "${goal.title}"?`)) {
       onDelete(goal._id);
     }

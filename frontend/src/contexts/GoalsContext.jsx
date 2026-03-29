@@ -87,6 +87,11 @@ export const GoalsProvider = ({ children }) => {
   };
 
   const updateGoal = async (id, goalData) => {
+    if (!id) {
+      const error = new Error('Goal ID is required for updates');
+      dispatch({ type: SET_ERROR, payload: error.message });
+      throw error;
+    }
     dispatch({ type: SET_LOADING, payload: true });
     try {
       const response = await goalsService.update(id, goalData);
@@ -99,6 +104,11 @@ export const GoalsProvider = ({ children }) => {
   };
 
   const deleteGoal = async (id) => {
+    if (!id) {
+      const error = new Error('Goal ID is required for deletion');
+      dispatch({ type: SET_ERROR, payload: error.message });
+      throw error;
+    }
     dispatch({ type: SET_LOADING, payload: true });
     try {
       await goalsService.delete(id);
