@@ -5,7 +5,8 @@ const goalSchema = new Schema(
     user: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: 'User'
+      ref: 'User',
+      index: true
     },
     title: {
       type: String,
@@ -23,22 +24,26 @@ const goalSchema = new Schema(
       type: String,
       required: [true, 'Context is required'],
       enum: ['work', 'health', 'finance', 'education', 'personal', 'relationships', 'creativity', 'travel'],
-      default: 'personal'
+      default: 'personal',
+      index: true
     },
     priority: {
       type: String,
       required: [true, 'Priority is required'],
       enum: ['low', 'medium', 'high', 'critical'],
-      default: 'medium'
+      default: 'medium',
+      index: true
     },
     status: {
       type: String,
       required: [true, 'Status is required'],
       enum: ['active', 'in-progress', 'completed', 'archived'],
-      default: 'active'
+      default: 'active',
+      index: true
     },
     dueDate: {
-      type: Date
+      type: Date,
+      index: true
     },
     progress: {
       type: Number,
@@ -57,6 +62,10 @@ const goalSchema = new Schema(
     },
     milestones: {
       type: [{
+        _id: {
+          type: Schema.Types.ObjectId,
+          default: () => new (require('mongoose')).Types.ObjectId()
+        },
         text: {
           type: String,
           required: true,
@@ -79,10 +88,15 @@ const goalSchema = new Schema(
     },
     notes: {
       type: [{
+        _id: {
+          type: Schema.Types.ObjectId,
+          default: () => new (require('mongoose')).Types.ObjectId()
+        },
         text: {
           type: String,
           required: true,
-          trim: true
+          trim: true,
+          maxlength: 300
         },
         createdAt: {
           type: Date,
@@ -107,13 +121,31 @@ const goalSchema = new Schema(
   }
 );
 
-// Auto-set completedAt when status changes to "completed"
+// Index for sorting and filtering
+goalSchema.index({ user: 1, createdAt: -1 });
+goalSchema.index({ user: 1, status: 1, dueDate: 1 });
+
+// Pre-save middleware: process tags and manage completedAt
 goalSchema.pre('save', function(next) {
-  if (this.isModified('status') && this.status === 'completed' && !this.completedAt) {
-    this.completedAt = new Date();
-  } else if (this.isModified('status') && this.status !== 'completed' && this.completedAt) {
-    this.completedAt = undefined;
+  // Process tags: lowercase, trim, and deduplicate
+  if (this.tags && Array.isArray(this.tags)) {
+    this.tags = [...new Set(this.tags.map(tag => tag.toLowerCase().trim()))];
   }
+
+  // Auto-set completedAt when status changes to "completed"
+  if (this.isModified('status')) {
+    if (this.status === 'completed' && !this.completedAt) {
+      this.completedAt = new Date();
+    } else if (this.status !== 'completed' && this.completedAt) {
+      this.completedAt = undefined;
+    }
+  }
+
+  // Ensure updatedAt is set
+  if (this.isModified()) {
+    this.updatedAt = new Date();
+  }
+
   next();
 });
 

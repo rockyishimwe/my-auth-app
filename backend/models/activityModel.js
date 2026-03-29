@@ -5,7 +5,8 @@ const activitySchema = new Schema(
     user: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: 'User'
+      ref: 'User',
+      index: true
     },
     type: {
       type: String,
@@ -14,8 +15,8 @@ const activitySchema = new Schema(
     },
     goalId: {
       type: Schema.Types.ObjectId,
-      required: true,
-      ref: 'Goal'
+      ref: 'Goal',
+      index: true
     },
     meta: {
       type: Schema.Types.Mixed,
@@ -23,12 +24,16 @@ const activitySchema = new Schema(
     },
     createdAt: {
       type: Date,
-      default: Date.now
+      default: Date.now,
+      index: true
     }
   },
   {
-    timestamps: true
+    timestamps: false
   }
 );
+
+// Compound index for efficient queries
+activitySchema.index({ user: 1, createdAt: -1 });
 
 module.exports = models.Activity || model('Activity', activitySchema);
