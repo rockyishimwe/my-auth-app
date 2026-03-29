@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Icon } from '@iconify/react';
 import { useAuth } from '../contexts/AuthContext';
 import { useUI } from '../contexts/GoalsContext';
 import '../styles/variables.css';
@@ -109,6 +110,7 @@ export default function SettingsPage() {
               transition: 'var(--transition-fast)'
             }}
           >
+            <Icon icon="solar:user-circle-bold" width={18} height={18} style={{ marginRight: 'var(--spacing-2)' }} />
             {loading ? 'Updating...' : 'Update Profile'}
           </button>
         </form>
@@ -130,10 +132,13 @@ export default function SettingsPage() {
             borderRadius: 'var(--radius)',
             background: 'var(--bg-primary)'
           }}>
-            <h3 style={{ fontSize: 'var(--font-base)', margin: '0 0 var(--spacing-2) 0' }}>
-              Theme
-            </h3>
-            <p style={{ margin: 0, fontSize: 'var(--font-sm)', color: 'var(--text-secondary)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-2)' }}>
+              <Icon icon="solar:palette-bold" width={18} height={18} style={{ color: 'var(--text)' }} />
+              <h3 style={{ fontSize: 'var(--font-base)', margin: 0 }}>
+                Theme
+              </h3>
+            </div>
+            <p style={{ margin: 'var(--spacing-2) 0 0 0', fontSize: 'var(--font-sm)', color: 'var(--text-secondary)' }}>
               Theme customization coming soon...
             </p>
           </div>
@@ -144,10 +149,13 @@ export default function SettingsPage() {
             borderRadius: 'var(--radius)',
             background: 'var(--bg-primary)'
           }}>
-            <h3 style={{ fontSize: 'var(--font-base)', margin: '0 0 var(--spacing-2) 0' }}>
-              Notifications
-            </h3>
-            <p style={{ margin: 0, fontSize: 'var(--font-sm)', color: 'var(--text-secondary)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-2)' }}>
+              <Icon icon="solar:bell-bold" width={18} height={18} style={{ color: 'var(--text)' }} />
+              <h3 style={{ fontSize: 'var(--font-base)', margin: 0 }}>
+                Notifications
+              </h3>
+            </div>
+            <p style={{ margin: 'var(--spacing-2) 0 0 0', fontSize: 'var(--font-sm)', color: 'var(--text-secondary)' }}>
               Notification settings coming soon...
             </p>
           </div>
@@ -158,10 +166,13 @@ export default function SettingsPage() {
             borderRadius: 'var(--radius)',
             background: 'var(--bg-primary)'
           }}>
-            <h3 style={{ fontSize: 'var(--font-base)', margin: '0 0 var(--spacing-2) 0' }}>
-              Data & Privacy
-            </h3>
-            <p style={{ margin: 0, fontSize: 'var(--font-sm)', color: 'var(--text-secondary)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-2)' }}>
+              <Icon icon="solar:shield-check-bold" width={18} height={18} style={{ color: 'var(--text)' }} />
+              <h3 style={{ fontSize: 'var(--font-base)', margin: 0 }}>
+                Data & Privacy
+              </h3>
+            </div>
+            <p style={{ margin: 'var(--spacing-2) 0 0 0', fontSize: 'var(--font-sm)', color: 'var(--text-secondary)' }}>
               Data management options coming soon...
             </p>
           </div>

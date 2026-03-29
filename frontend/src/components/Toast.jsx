@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { Icon } from '@iconify/react';
 import { useUI } from '../contexts/GoalsContext';
 import '../styles/variables.css';
 
@@ -27,12 +28,12 @@ export default function Toast() {
 
   const getToastIcon = (type) => {
     const icons = {
-      success: '✓',
-      error: '✕',
-      warning: '⚠',
-      info: 'ℹ'
+      success: 'solar:check-circle-bold',
+      error: 'solar:close-circle-bold',
+      warning: 'solar:danger-bold',
+      info: 'solar:info-circle-bold'
     };
-    return icons[type] || 'ℹ';
+    return icons[type] || 'solar:info-circle-bold';
   };
 
   return (
@@ -81,7 +82,7 @@ export default function Toast() {
               flexShrink: 0
             }}
           >
-            {getToastIcon(toast.type)}
+            <Icon icon={getToastIcon(toast.type)} width={16} height={16} style={{ color: 'white' }} />
           </div>
           
           <div style={{ flex: 1 }}>

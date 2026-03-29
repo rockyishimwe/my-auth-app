@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Icon } from '@iconify/react';
 import { useAuth } from '../contexts/AuthContext';
 import { useUI } from '../contexts/GoalsContext';
 import { authService } from '../services/api';
@@ -288,6 +289,7 @@ export default function ProfilePage() {
                       cursor: loading ? 'not-allowed' : 'pointer'
                     }}
                   >
+                    <Icon icon="solar:check-circle-bold" width={16} height={16} style={{ marginRight: 'var(--spacing-2)' }} />
                     {loading ? 'Saving...' : 'Save Changes'}
                   </button>
                   <button
@@ -311,6 +313,7 @@ export default function ProfilePage() {
                       cursor: 'pointer'
                     }}
                   >
+                    <Icon icon="solar:close-circle-bold" width={16} height={16} style={{ marginRight: 'var(--spacing-2)' }} />
                     Cancel
                   </button>
                 </div>

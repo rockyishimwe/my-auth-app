@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Icon } from '@iconify/react';
 import { useGoals, useUI } from '../contexts/GoalsContext';
 import GoalCard from '../components/GoalCard';
 import GoalTable from '../components/GoalTable';
@@ -102,7 +103,8 @@ export default function GoalsListPage() {
                 transition: 'var(--transition-fast)'
               }}
             >
-              + New Goal
+              <Icon icon="solar:add-circle-bold" width={18} height={18} style={{ marginRight: 'var(--spacing-2)' }} />
+              New Goal
             </button>
             
             <div className="flex" style={{ gap: 'var(--spacing-1)' }}>
@@ -118,6 +120,7 @@ export default function GoalsListPage() {
                   cursor: 'pointer'
                 }}
               >
+                <Icon icon="solar:widget-bold" width={16} height={16} />
                 Cards
               </button>
               <button
@@ -132,6 +135,7 @@ export default function GoalsListPage() {
                   cursor: 'pointer'
                 }}
               >
+                <Icon icon="solar:table-bold" width={16} height={16} />
                 Table
               </button>
             </div>
@@ -198,21 +202,35 @@ export default function GoalsListPage() {
             <option key="critical" value="critical">Critical</option>
           </select>
 
-          <input 
-            type="text"
-            placeholder="Search goals..."
-            value={filters.search}
-            onChange={(e) => handleFilterChange('search', e.target.value)}
-            style={{
-              flex: 1,
-              minWidth: '200px',
-              padding: 'var(--spacing-2)',
-              border: '1px solid var(--border)',
-              borderRadius: 'var(--radius)',
-              background: 'var(--surface)',
-              fontSize: 'var(--font-base)'
-            }}
-          />
+          <div style={{ position: 'relative', flex: 1, minWidth: '200px' }}>
+            <Icon 
+              icon="solar:magnifer-bold" 
+              width={18} 
+              height={18} 
+              style={{ 
+                position: 'absolute', 
+                left: 'var(--spacing-2)', 
+                top: '50%', 
+                transform: 'translateY(-50%)',
+                color: 'var(--text-muted)',
+                zIndex: 1
+              }} 
+            />
+            <input 
+              type="text"
+              placeholder="Search goals..."
+              value={filters.search}
+              onChange={(e) => handleFilterChange('search', e.target.value)}
+              style={{
+                width: '100%',
+                padding: 'var(--spacing-2) var(--spacing-2) var(--spacing-2) calc(var(--spacing-2) + 24px)',
+                border: '1px solid var(--border)',
+                borderRadius: 'var(--radius)',
+                background: 'var(--surface)',
+                fontSize: 'var(--font-base)'
+              }}
+            />
+          </div>
 
           <button
             onClick={() => setFilters({ context: '', status: '', priority: '', search: '' })}
@@ -226,6 +244,7 @@ export default function GoalsListPage() {
               cursor: 'pointer'
             }}
           >
+            <Icon icon="solar:filter-bold" width={16} height={16} style={{ marginRight: 'var(--spacing-1)' }} />
             Clear Filters
           </button>
         </div>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { Icon } from '@iconify/react';
 import { useGoals, useUI } from '../contexts/GoalsContext';
 import { goalsService } from '../services/api';
 import ProgressRing from '../components/ProgressRing';
@@ -21,7 +22,7 @@ export default function GoalDetailPage() {
 
   useEffect(() => {
     const fetchGoal = async () => {
-      if (!id || id === 'undefined') {
+      if (!id || id === 'undefined' || id === 'null') {
         navigate('/dashboard');
         return;
       }
@@ -182,6 +183,7 @@ export default function GoalDetailPage() {
                     cursor: 'pointer'
                   }}
                 >
+                  <Icon icon="solar:pen-bold" width={16} height={16} style={{ marginRight: 'var(--spacing-2)' }} />
                   Edit Goal
                 </button>
               )}
@@ -321,6 +323,7 @@ export default function GoalDetailPage() {
                       cursor: 'pointer'
                     }}
                   >
+                    <Icon icon="solar:check-circle-bold" width={16} height={16} style={{ marginRight: 'var(--spacing-2)' }} />
                     Save Changes
                   </button>
                   <button
@@ -335,6 +338,7 @@ export default function GoalDetailPage() {
                       cursor: 'pointer'
                     }}
                   >
+                    <Icon icon="solar:close-circle-bold" width={16} height={16} style={{ marginRight: 'var(--spacing-2)' }} />
                     Cancel
                   </button>
                 </div>
@@ -485,6 +489,7 @@ export default function GoalDetailPage() {
                 marginTop: 'var(--spacing-3)'
               }}
             >
+              <Icon icon="solar:trash-bin-trash-bold" width={16} height={16} style={{ marginRight: 'var(--spacing-2)' }} />
               Delete Goal
             </button>
           </div>

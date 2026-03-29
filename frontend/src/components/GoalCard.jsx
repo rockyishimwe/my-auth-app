@@ -1,3 +1,4 @@
+import { Icon } from '@iconify/react';
 import { useUI } from '../contexts/GoalsContext';
 import '../styles/variables.css';
 
@@ -228,6 +229,7 @@ export default function GoalCard({ goal, onUpdate, onDelete }) {
             transition: 'var(--transition-fast)'
           }}
         >
+          <Icon icon="solar:pen-bold" width={16} height={16} style={{ marginRight: 'var(--spacing-1)' }} />
           Edit
         </button>
         
@@ -244,6 +246,7 @@ export default function GoalCard({ goal, onUpdate, onDelete }) {
             transition: 'var(--transition-fast)'
           }}
         >
+          <Icon icon="solar:trash-bin-trash-bold" width={16} height={16} style={{ marginRight: 'var(--spacing-1)' }} />
           Delete
         </button>
       </div>

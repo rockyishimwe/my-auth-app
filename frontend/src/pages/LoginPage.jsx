@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Icon } from '@iconify/react';
 import { useAuth } from '../contexts/AuthContext';
 import { authService } from '../services/api';
 import '../styles/variables.css';
@@ -372,6 +373,15 @@ export default function LoginPage() {
               fontFamily: 'JetBrains Mono, monospace'
             }}
           >
+            <Icon 
+              icon={loading ? "solar:refresh-bold" : (isRegister ? "solar:user-plus-bold" : "solar:login-bold")} 
+              width={18} 
+              height={18} 
+              style={{ 
+                marginRight: 'var(--spacing-2)',
+                animation: loading ? 'spin 1s linear infinite' : 'none'
+              }} 
+            />
             {loading ? 'Please wait...' : (isRegister ? 'Create Account' : 'Sign In')}
           </button>
         </form>

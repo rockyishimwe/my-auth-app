@@ -1,16 +1,17 @@
 import { useState, useEffect } from 'react';
+import { Icon } from '@iconify/react';
 import { useGoals, useUI } from '../contexts/GoalsContext';
 import '../styles/variables.css';
 
 const contextConfig = {
-  work: { icon: '', color: 'var(--work)', label: 'Work' },
-  health: { icon: '', color: 'var(--health)', label: 'Health' },
-  finance: { icon: '', color: 'var(--finance)', label: 'Finance' },
-  education: { icon: '', color: 'var(--education)', label: 'Education' },
-  personal: { icon: '', color: 'var(--personal)', label: 'Personal' },
-  relationships: { icon: '', color: 'var(--relationships)', label: 'Relationships' },
-  creativity: { icon: '', color: 'var(--creativity)', label: 'Creativity' },
-  travel: { icon: '', color: 'var(--travel)', label: 'Travel' }
+  work: { icon: 'solar:bag-bold', color: 'var(--work)', label: 'Work' },
+  health: { icon: 'solar:heart-pulse-bold', color: 'var(--health)', label: 'Health' },
+  finance: { icon: 'solar:wallet-bold', color: 'var(--finance)', label: 'Finance' },
+  education: { icon: 'solar:book-bold', color: 'var(--education)', label: 'Education' },
+  personal: { icon: 'solar:user-bold', color: 'var(--personal)', label: 'Personal' },
+  relationships: { icon: 'solar:users-group-bold', color: 'var(--relationships)', label: 'Relationships' },
+  creativity: { icon: 'solar:pallete-bold', color: 'var(--creativity)', label: 'Creativity' },
+  travel: { icon: 'solar:map-bold', color: 'var(--travel)', label: 'Travel' }
 };
 
 export default function ContextsPage() {
@@ -103,7 +104,7 @@ export default function ContextsPage() {
               <div style={{ marginBottom: 'var(--spacing-3)' }}>
                 <div className="flex-between" style={{ alignItems: 'center' }}>
                   <div className="flex" style={{ alignItems: 'center', gap: 'var(--spacing-2)' }}>
-                    <span style={{ fontSize: 'var(--font-2xl)' }}>{config.icon}</span>
+                    <Icon icon={config.icon} width={32} height={32} style={{ color: config.color }} />
                     <h3 style={{ 
                       fontSize: 'var(--font-lg)', 
                       fontWeight: 'bold', 

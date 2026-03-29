@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Icon } from '@iconify/react';
 import { useGoals, useUI } from '../contexts/GoalsContext';
 import { goalsService } from '../services/api';
 import GoalCard from '../components/GoalCard';
@@ -80,7 +81,8 @@ export default function DashboardPage() {
           }}
           onClick={() => handleCreateGoal({ title: 'New Goal', context: 'personal', priority: 'medium' })}
         >
-          + New Goal
+          <Icon icon="solar:add-circle-bold" width={18} height={18} style={{ marginRight: 'var(--spacing-2)' }} />
+          New Goal
         </button>
       </header>
 
@@ -94,8 +96,11 @@ export default function DashboardPage() {
             padding: 'var(--spacing-4)',
             boxShadow: 'var(--shadow)'
           }}>
-            <div style={{ fontSize: 'var(--font-2xl)', fontWeight: 'bold', color: 'var(--text)' }}>
-              {stats.totalGoals}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-2)', marginBottom: 'var(--spacing-2)' }}>
+              <Icon icon="solar:target-bold" width={28} height={28} style={{ color: 'var(--work)' }} />
+              <div style={{ fontSize: 'var(--font-2xl)', fontWeight: 'bold', color: 'var(--text)' }}>
+                {stats.totalGoals}
+              </div>
             </div>
             <div style={{ fontSize: 'var(--font-sm)', color: 'var(--text-muted)' }}>
               Total Goals
@@ -109,8 +114,11 @@ export default function DashboardPage() {
             padding: 'var(--spacing-4)',
             boxShadow: 'var(--shadow)'
           }}>
-            <div style={{ fontSize: 'var(--font-2xl)', fontWeight: 'bold', color: 'var(--text)' }}>
-              {stats.activeGoals}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-2)', marginBottom: 'var(--spacing-2)' }}>
+              <Icon icon="solar:play-circle-bold" width={28} height={28} style={{ color: 'var(--status-active)' }} />
+              <div style={{ fontSize: 'var(--font-2xl)', fontWeight: 'bold', color: 'var(--text)' }}>
+                {stats.activeGoals}
+              </div>
             </div>
             <div style={{ fontSize: 'var(--font-sm)', color: 'var(--text-muted)' }}>
               Active
@@ -124,8 +132,11 @@ export default function DashboardPage() {
             padding: 'var(--spacing-4)',
             boxShadow: 'var(--shadow)'
           }}>
-            <div style={{ fontSize: 'var(--font-2xl)', fontWeight: 'bold', color: 'var(--text)' }}>
-              {stats.completedGoals}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-2)', marginBottom: 'var(--spacing-2)' }}>
+              <Icon icon="solar:check-circle-bold" width={28} height={28} style={{ color: 'var(--status-completed)' }} />
+              <div style={{ fontSize: 'var(--font-2xl)', fontWeight: 'bold', color: 'var(--text)' }}>
+                {stats.completedGoals}
+              </div>
             </div>
             <div style={{ fontSize: 'var(--font-sm)', color: 'var(--text-muted)' }}>
               Completed
@@ -139,8 +150,11 @@ export default function DashboardPage() {
             padding: 'var(--spacing-4)',
             boxShadow: 'var(--shadow)'
           }}>
-            <div style={{ fontSize: 'var(--font-2xl)', fontWeight: 'bold', color: 'var(--text)' }}>
-              {Math.round(stats.completionRate)}%
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-2)', marginBottom: 'var(--spacing-2)' }}>
+              <Icon icon="solar:chart-bold" width={28} height={28} style={{ color: 'var(--priority-high)' }} />
+              <div style={{ fontSize: 'var(--font-2xl)', fontWeight: 'bold', color: 'var(--text)' }}>
+                {Math.round(stats.completionRate)}%
+              </div>
             </div>
             <div style={{ fontSize: 'var(--font-sm)', color: 'var(--text-muted)' }}>
               Completion Rate
@@ -231,9 +245,9 @@ export default function DashboardPage() {
         />
       ) : (
         <div className="goal-cards-desktop">
-          {filteredGoals.map(goal => (
+          {filteredGoals.map((goal, index) => (
             <GoalCard
-              key={goal._id}
+              key={goal._id || `goal-${index}`}
               goal={goal}
               onUpdate={handleUpdateGoal}
               onDelete={handleDeleteGoal}

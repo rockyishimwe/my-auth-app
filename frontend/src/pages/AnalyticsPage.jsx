@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { Icon } from '@iconify/react';
 import { useGoals } from '../contexts/GoalsContext';
 import '../styles/variables.css';
 
@@ -90,8 +91,11 @@ const DonutChart = ({ data, colors, size = 200 }) => {
         transform: 'translate(-50%, -50%)',
         textAlign: 'center'
       }}>
-        <div style={{ fontSize: 'var(--font-lg)', fontWeight: 'bold', color: 'var(--text)' }}>
-          {total}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-2)', marginBottom: 'var(--spacing-2)' }}>
+          <Icon icon="solar:target-bold" width={24} height={24} style={{ color: 'var(--work)' }} />
+          <div style={{ fontSize: 'var(--font-lg)', fontWeight: 'bold', color: 'var(--text)' }}>
+            {total}
+          </div>
         </div>
         <div style={{ fontSize: 'var(--font-sm)', color: 'var(--text-muted)' }}>
           Total Goals
@@ -310,11 +314,11 @@ export default function AnalyticsPage() {
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4" style={{ gap: 'var(--spacing-4)', marginBottom: 'var(--spacing-5)' }}>
         {[
-          { label: 'Avg. Days to Complete', value: analytics.summary.avgDaysToComplete || 'N/A', color: 'var(--text)', size: 'var(--font-2xl)' },
-          { label: 'Best Context',           value: analytics.summary.bestContext,         color: 'var(--text)', size: 'var(--font-lg)' },
-          { label: 'Most Productive Day',    value: analytics.summary.mostProductiveDay,   color: 'var(--text)', size: 'var(--font-lg)' },
-          { label: 'Completion Rate',        value: `${analytics.summary.completionRate}%`, color: 'var(--status-completed)', size: 'var(--font-2xl)' }
-        ].map(({ label, value, color, size }) => (
+          { label: 'Avg. Days to Complete', value: analytics.summary.avgDaysToComplete || 'N/A', color: 'var(--text)', size: 'var(--font-2xl)', icon: 'solar:calendar-bold' },
+          { label: 'Best Context',           value: analytics.summary.bestContext,         color: 'var(--text)', size: 'var(--font-lg)', icon: 'solar:star-bold' },
+          { label: 'Most Productive Day',    value: analytics.summary.mostProductiveDay,   color: 'var(--text)', size: 'var(--font-lg)', icon: 'solar:fire-bold' },
+          { label: 'Completion Rate',        value: `${analytics.summary.completionRate}%`, color: 'var(--status-completed)', size: 'var(--font-2xl)', icon: 'solar:chart-bold' }
+        ].map(({ label, value, color, size, icon }) => (
           <div key={label} style={{
             background: 'var(--surface)',
             border: '1px solid var(--border)',
@@ -322,9 +326,12 @@ export default function AnalyticsPage() {
             padding: 'var(--spacing-4)',
             boxShadow: 'var(--shadow-md)'
           }}>
-            <h3 style={{ fontSize: 'var(--font-sm)', color: 'var(--text-muted)', margin: '0 0 var(--spacing-1) 0' }}>
-              {label}
-            </h3>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-2)', marginBottom: 'var(--spacing-2)' }}>
+              <Icon icon={icon} width={20} height={20} style={{ color: color }} />
+              <h3 style={{ fontSize: 'var(--font-sm)', color: 'var(--text-muted)', margin: 0 }}>
+                {label}
+              </h3>
+            </div>
             <div style={{ fontSize: size, fontWeight: 'bold', color }}>
               {value}
             </div>

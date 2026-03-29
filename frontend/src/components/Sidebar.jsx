@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Icon } from '@iconify/react';
 import { useAuth } from '../contexts/AuthContext';
 import { useUI } from '../contexts/GoalsContext';
 
@@ -21,22 +22,22 @@ export default function Sidebar() {
   };
 
   const contextItems = [
-    { id: 'work', label: 'Work', color: 'var(--work)', icon: '' },
-    { id: 'health', label: 'Health', color: 'var(--health)', icon: '' },
-    { id: 'finance', label: 'Finance', color: 'var(--finance)', icon: '' },
-    { id: 'education', label: 'Education', color: 'var(--education)', icon: '' },
-    { id: 'personal', label: 'Personal', color: 'var(--personal)', icon: '' },
-    { id: 'relationships', label: 'Relationships', color: 'var(--relationships)', icon: '' },
-    { id: 'creativity', label: 'Creativity', color: 'var(--creativity)', icon: '' },
-    { id: 'travel', label: 'Travel', color: 'var(--travel)', icon: '' }
+    { id: 'work', label: 'Work', color: 'var(--work)', icon: 'solar:bag-bold' },
+    { id: 'health', label: 'Health', color: 'var(--health)', icon: 'solar:heart-pulse-bold' },
+    { id: 'finance', label: 'Finance', color: 'var(--finance)', icon: 'solar:wallet-bold' },
+    { id: 'education', label: 'Education', color: 'var(--education)', icon: 'solar:book-bold' },
+    { id: 'personal', label: 'Personal', color: 'var(--personal)', icon: 'solar:user-bold' },
+    { id: 'relationships', label: 'Relationships', color: 'var(--relationships)', icon: 'solar:users-group-bold' },
+    { id: 'creativity', label: 'Creativity', color: 'var(--creativity)', icon: 'solar:pallete-bold' },
+    { id: 'travel', label: 'Travel', color: 'var(--travel)', icon: 'solar:map-bold' }
   ];
 
   const navItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: '' },
-    { id: 'goals', label: 'Goals', icon: '' },
-    { id: 'analytics', label: 'Analytics', icon: '' },
-    { id: 'contexts', label: 'Contexts', icon: '' },
-    { id: 'settings', label: 'Settings', icon: '' }
+    { id: 'dashboard', label: 'Dashboard', icon: 'solar:widget-bold' },
+    { id: 'goals', label: 'Goals', icon: 'solar:target-bold' },
+    { id: 'analytics', label: 'Analytics', icon: 'solar:chart-bold' },
+    { id: 'contexts', label: 'Contexts', icon: 'solar:filter-bold' },
+    { id: 'settings', label: 'Settings', icon: 'solar:settings-bold' }
   ];
 
   const isMobile = windowWidth < 768;
@@ -69,7 +70,7 @@ export default function Sidebar() {
                 cursor: 'pointer'
               }}
             >
-              ×
+              <Icon icon="solar:close-circle-bold" width={24} height={24} style={{ color: 'white' }} />
             </button>
           </div>
 
@@ -130,7 +131,7 @@ export default function Sidebar() {
                   background: activePage === item.id ? 'rgba(255, 255, 255, 0.1)' : 'transparent'
                 }}
               >
-                <span>{item.icon}</span>
+                <Icon icon={item.icon} width={22} height={22} style={{ color: 'white' }} />
                 <span>{item.label}</span>
               </button>
             ))}
@@ -158,7 +159,7 @@ export default function Sidebar() {
                   opacity: 0.8
                 }}
               >
-                <span style={{ fontSize: 'var(--font-lg)' }}>{context.icon}</span>
+                <Icon icon={context.icon} width={22} height={22} style={{ color: context.color }} />
                 <span>{context.label}</span>
               </button>
             ))}
@@ -179,6 +180,7 @@ export default function Sidebar() {
                 cursor: 'pointer'
               }}
             >
+              <Icon icon="solar:logout-bold" width={18} height={18} style={{ color: 'white', marginRight: 'var(--spacing-2)' }} />
               Sign Out
             </button>
           </div>
@@ -279,7 +281,7 @@ export default function Sidebar() {
               background: activePage === item.id ? 'rgba(255, 255, 255, 0.1)' : 'transparent'
             }}
           >
-            <span>{item.icon}</span>
+            <Icon icon={item.icon} width={22} height={22} style={{ color: 'white' }} />
             {!sidebarCollapsed && <span>{item.label}</span>}
           </button>
         ))}
@@ -307,7 +309,7 @@ export default function Sidebar() {
               opacity: 0.8
             }}
           >
-            <span style={{ fontSize: 'var(--font-lg)' }}>{context.icon}</span>
+            <Icon icon={context.icon} width={22} height={22} style={{ color: context.color }} />
             {!sidebarCollapsed && <span>{context.label}</span>}
           </button>
         ))}
@@ -328,7 +330,12 @@ export default function Sidebar() {
             width: isTablet ? '100%' : 'auto'
           }}
         >
-          {sidebarCollapsed ? '→' : '←'}
+          <Icon 
+            icon={sidebarCollapsed ? "solar:hamburger-menu-bold" : "solar:close-circle-bold"} 
+            width={18} 
+            height={18} 
+            style={{ color: 'white' }} 
+          />
         </button>
       </div>
     </div>

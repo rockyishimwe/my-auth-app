@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Icon } from '@iconify/react';
 import { useUI } from '../contexts/GoalsContext';
 import '../styles/variables.css';
 
@@ -142,6 +143,7 @@ export default function GoalTable({ goals, onUpdate, onDelete, selectedGoals, on
               cursor: 'pointer'
             }}
           >
+            <Icon icon="solar:archive-bold" width={14} height={14} style={{ marginRight: 'var(--spacing-1)' }} />
             Archive
           </button>
           <button
@@ -156,6 +158,7 @@ export default function GoalTable({ goals, onUpdate, onDelete, selectedGoals, on
               cursor: 'pointer'
             }}
           >
+            <Icon icon="solar:trash-bin-trash-bold" width={14} height={14} style={{ marginRight: 'var(--spacing-1)' }} />
             Delete
           </button>
         </div>
@@ -190,7 +193,14 @@ export default function GoalTable({ goals, onUpdate, onDelete, selectedGoals, on
                 borderBottom: '1px solid var(--border)',
                 cursor: 'pointer'
               }} onClick={() => handleSort('title')}>
-                Title {sortField === 'title' && (sortDirection === 'asc' ? '↑' : '↓')}
+                Title {sortField === 'title' && (
+                  <Icon 
+                    icon={sortDirection === 'asc' ? 'solar:arrow-up-bold' : 'solar:arrow-down-bold'} 
+                    width={14} 
+                    height={14} 
+                    style={{ marginLeft: 'var(--spacing-1)' }} 
+                  />
+                )}
               </th>
               <th style={{ 
                 padding: 'var(--spacing-3)', 
@@ -201,7 +211,14 @@ export default function GoalTable({ goals, onUpdate, onDelete, selectedGoals, on
                 borderBottom: '1px solid var(--border)',
                 cursor: 'pointer'
               }} onClick={() => handleSort('context')}>
-                Context {sortField === 'context' && (sortDirection === 'asc' ? '↑' : '↓')}
+                Context {sortField === 'context' && (
+                  <Icon 
+                    icon={sortDirection === 'asc' ? 'solar:arrow-up-bold' : 'solar:arrow-down-bold'} 
+                    width={14} 
+                    height={14} 
+                    style={{ marginLeft: 'var(--spacing-1)' }} 
+                  />
+                )}
               </th>
               <th style={{ 
                 padding: 'var(--spacing-3)', 
@@ -212,7 +229,14 @@ export default function GoalTable({ goals, onUpdate, onDelete, selectedGoals, on
                 borderBottom: '1px solid var(--border)',
                 cursor: 'pointer'
               }} onClick={() => handleSort('priority')}>
-                Priority {sortField === 'priority' && (sortDirection === 'asc' ? '↑' : '↓')}
+                Priority {sortField === 'priority' && (
+                  <Icon 
+                    icon={sortDirection === 'asc' ? 'solar:arrow-up-bold' : 'solar:arrow-down-bold'} 
+                    width={14} 
+                    height={14} 
+                    style={{ marginLeft: 'var(--spacing-1)' }} 
+                  />
+                )}
               </th>
               <th style={{ 
                 padding: 'var(--spacing-3)', 
@@ -223,7 +247,14 @@ export default function GoalTable({ goals, onUpdate, onDelete, selectedGoals, on
                 borderBottom: '1px solid var(--border)',
                 cursor: 'pointer'
               }} onClick={() => handleSort('status')}>
-                Status {sortField === 'status' && (sortDirection === 'asc' ? '↑' : '↓')}
+                Status {sortField === 'status' && (
+                  <Icon 
+                    icon={sortDirection === 'asc' ? 'solar:arrow-up-bold' : 'solar:arrow-down-bold'} 
+                    width={14} 
+                    height={14} 
+                    style={{ marginLeft: 'var(--spacing-1)' }} 
+                  />
+                )}
               </th>
               <th style={{ 
                 padding: 'var(--spacing-3)', 
@@ -234,7 +265,14 @@ export default function GoalTable({ goals, onUpdate, onDelete, selectedGoals, on
                 borderBottom: '1px solid var(--border)',
                 cursor: 'pointer'
               }} onClick={() => handleSort('progress')}>
-                Progress {sortField === 'progress' && (sortDirection === 'asc' ? '↑' : '↓')}
+                Progress {sortField === 'progress' && (
+                  <Icon 
+                    icon={sortDirection === 'asc' ? 'solar:arrow-up-bold' : 'solar:arrow-down-bold'} 
+                    width={14} 
+                    height={14} 
+                    style={{ marginLeft: 'var(--spacing-1)' }} 
+                  />
+                )}
               </th>
               <th style={{ 
                 padding: 'var(--spacing-3)', 
@@ -245,7 +283,14 @@ export default function GoalTable({ goals, onUpdate, onDelete, selectedGoals, on
                 borderBottom: '1px solid var(--border)',
                 cursor: 'pointer'
               }} onClick={() => handleSort('dueDate')}>
-                Due Date {sortField === 'dueDate' && (sortDirection === 'asc' ? '↑' : '↓')}
+                Due Date {sortField === 'dueDate' && (
+                  <Icon 
+                    icon={sortDirection === 'asc' ? 'solar:arrow-up-bold' : 'solar:arrow-down-bold'} 
+                    width={14} 
+                    height={14} 
+                    style={{ marginLeft: 'var(--spacing-1)' }} 
+                  />
+                )}
               </th>
               <th style={{ 
                 padding: 'var(--spacing-3)', 
@@ -255,7 +300,7 @@ export default function GoalTable({ goals, onUpdate, onDelete, selectedGoals, on
                 color: 'var(--text)',
                 borderBottom: '1px solid var(--border)'
               }}>
-                Actions
+                <span key="actions-header">Actions</span>
               </th>
             </tr>
           </thead>
@@ -362,7 +407,7 @@ export default function GoalTable({ goals, onUpdate, onDelete, selectedGoals, on
                         cursor: 'pointer'
                       }}
                     >
-                      Edit
+                      <Icon icon="solar:pen-bold" width={14} height={14} />
                     </button>
                     <button
                       onClick={() => onDelete(goal._id)}
@@ -376,7 +421,7 @@ export default function GoalTable({ goals, onUpdate, onDelete, selectedGoals, on
                         cursor: 'pointer'
                       }}
                     >
-                      Delete
+                      <Icon icon="solar:trash-bin-trash-bold" width={14} height={14} />
                     </button>
                   </div>
                 </td>
