@@ -76,24 +76,19 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
-  
-  // Debug: Log state changes
-  console.log('AuthContext state:', state);
 
   const login = async (credentials) => {
     dispatch({ type: SET_LOADING, payload: true });
     dispatch({ type: SET_ERROR,   payload: null });
     try {
       const response = await authService.login(credentials);
-      console.log('Login response:', response); // Debug log
-      console.log('Response data:', response.data); // Debug log
       
       // Handle different response structures
       let user, token;
       
       if (response.data.data) {
-        // Structure: { success: true, data: { user, token } }
-        user = response.data.data.user;
+        // Structure: { success: true, data: { _id, name, email, avatarColor, token } }
+        user = response.data.data;
         token = response.data.data.token;
       } else if (response.data.user && response.data.token) {
         // Structure: { user, token }
@@ -105,14 +100,10 @@ export const AuthProvider = ({ children }) => {
         token = response.data.token;
       }
       
-      console.log('Extracted user:', user, 'token:', token); // Debug log
       localStorage.setItem('token', token);
-      console.log('Dispatching LOGIN action with:', { user, token }); // Debug log
       dispatch({ type: LOGIN, payload: { user, token } });
-      console.log('LOGIN action dispatched'); // Debug log
     } catch (error) {
       const message = error.response?.data?.message || 'Login failed';
-      console.log('Login error:', error); // Debug log
       dispatch({ type: SET_ERROR, payload: message });
       throw error;   // re-throw so the form can show the message
     }

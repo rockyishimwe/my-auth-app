@@ -61,24 +61,19 @@ export default function LoginPage() {
     setErrors({});
 
     try {
-      console.log('Submitting login form...'); // Debug log
       if (isRegister) {
-        console.log('Calling register...'); // Debug log
         await register({
           name: formData.name,
           email: formData.email,
           password: formData.password
         });
       } else {
-        console.log('Calling login with:', { email: formData.email, password: '***' }); // Debug log
         await login({
           email: formData.email,
           password: formData.password
         });
-        console.log('Login call completed'); // Debug log
       }
     } catch (error) {
-      console.log('Login error in page:', error); // Debug log
       const message = error.response?.data?.message || 'An error occurred';
       setErrors({ submit: message });
     } finally {
@@ -108,9 +103,7 @@ export default function LoginPage() {
 
   // Redirect to dashboard if user is logged in
   useEffect(() => {
-    console.log('LoginPage - user state:', user); // Debug log
     if (user) {
-      console.log('Redirecting to dashboard...'); // Debug log
       navigate('/dashboard');
     }
   }, [user, navigate]);
