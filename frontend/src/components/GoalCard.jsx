@@ -1,4 +1,4 @@
-import { useUI } from '../contexts/UIContext';
+import { useUI } from '../contexts/GoalsContext';
 import '../styles/variables.css';
 
 export default function GoalCard({ goal, onUpdate, onDelete }) {

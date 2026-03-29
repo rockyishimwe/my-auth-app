@@ -3,14 +3,14 @@ import { useGoals, useUI } from '../contexts/GoalsContext';
 import '../styles/variables.css';
 
 const contextConfig = {
-  work: { icon: '💼', color: 'var(--work)', label: 'Work' },
-  health: { icon: '🏃', color: 'var(--health)', label: 'Health' },
-  finance: { icon: '💰', color: 'var(--finance)', label: 'Finance' },
-  education: { icon: '📚', color: 'var(--education)', label: 'Education' },
-  personal: { icon: '👤', color: 'var(--personal)', label: 'Personal' },
-  relationships: { icon: '❤️', color: 'var(--relationships)', label: 'Relationships' },
-  creativity: { icon: '🎨', color: 'var(--creativity)', label: 'Creativity' },
-  travel: { icon: '✈️', color: 'var(--travel)', label: 'Travel' }
+  work: { icon: '', color: 'var(--work)', label: 'Work' },
+  health: { icon: '', color: 'var(--health)', label: 'Health' },
+  finance: { icon: '', color: 'var(--finance)', label: 'Finance' },
+  education: { icon: '', color: 'var(--education)', label: 'Education' },
+  personal: { icon: '', color: 'var(--personal)', label: 'Personal' },
+  relationships: { icon: '', color: 'var(--relationships)', label: 'Relationships' },
+  creativity: { icon: '', color: 'var(--creativity)', label: 'Creativity' },
+  travel: { icon: '', color: 'var(--travel)', label: 'Travel' }
 };
 
 export default function ContextsPage() {

@@ -1,4 +1,5 @@
 import { createContext, useContext, useReducer } from 'react';
+import PropTypes from 'prop-types';
 import { goalsService } from '../services/api';
 
 // ─────────────────────────────────────────────
@@ -72,13 +73,16 @@ export const GoalsProvider = ({ children }) => {
     }
   };
 
+  // FIX: return the created goal so callers can use it
   const createGoal = async (goalData) => {
     dispatch({ type: SET_LOADING, payload: true });
     try {
       const response = await goalsService.create(goalData);
       dispatch({ type: ADD_GOAL, payload: response.data });
+      return response.data;
     } catch (error) {
       dispatch({ type: SET_ERROR, payload: error.message });
+      throw error;
     }
   };
 
@@ -105,23 +109,29 @@ export const GoalsProvider = ({ children }) => {
     }
   };
 
+  // FIX: rethrow errors so callers can handle failures
   const updateProgress = async (id, progress) => {
     dispatch({ type: SET_LOADING, payload: true });
     try {
       const response = await goalsService.updateProgress(id, { progress });
       dispatch({ type: UPDATE_GOAL, payload: response.data });
+      return response.data;
     } catch (error) {
       dispatch({ type: SET_ERROR, payload: error.message });
+      throw error;
     }
   };
 
+  // FIX: rethrow errors so callers can handle failures
   const updateStatus = async (id, status) => {
     dispatch({ type: SET_LOADING, payload: true });
     try {
       const response = await goalsService.updateStatus(id, { status });
       dispatch({ type: UPDATE_GOAL, payload: response.data });
+      return response.data;
     } catch (error) {
       dispatch({ type: SET_ERROR, payload: error.message });
+      throw error;
     }
   };
 
@@ -155,6 +165,11 @@ export const GoalsProvider = ({ children }) => {
       {children}
     </GoalsContext.Provider>
   );
+};
+
+// FIX: PropTypes for children
+GoalsProvider.propTypes = {
+  children: PropTypes.node.isRequired
 };
 
 export const useGoals = () => {
@@ -235,6 +250,11 @@ export const UIProvider = ({ children }) => {
       {children}
     </UIContext.Provider>
   );
+};
+
+// FIX: PropTypes for children
+UIProvider.propTypes = {
+  children: PropTypes.node.isRequired
 };
 
 export const useUI = () => {
