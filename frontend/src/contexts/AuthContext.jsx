@@ -76,6 +76,9 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
+  
+  // Debug: Log state changes
+  console.log('AuthContext state:', state);
 
   const login = async (credentials) => {
     dispatch({ type: SET_LOADING, payload: true });
@@ -90,18 +93,23 @@ export const AuthProvider = ({ children }) => {
       
       if (response.data.data) {
         // Structure: { success: true, data: { user, token } }
-        ({ user, token } = response.data.data);
+        user = response.data.data.user;
+        token = response.data.data.token;
       } else if (response.data.user && response.data.token) {
         // Structure: { user, token }
-        ({ user, token } = response.data;
+        user = response.data.user;
+        token = response.data.token;
       } else {
         // Direct structure: { user, token }
-        ({ user, token } = response.data;
+        user = response.data.user;
+        token = response.data.token;
       }
       
       console.log('Extracted user:', user, 'token:', token); // Debug log
       localStorage.setItem('token', token);
+      console.log('Dispatching LOGIN action with:', { user, token }); // Debug log
       dispatch({ type: LOGIN, payload: { user, token } });
+      console.log('LOGIN action dispatched'); // Debug log
     } catch (error) {
       const message = error.response?.data?.message || 'Login failed';
       console.log('Login error:', error); // Debug log

@@ -5,7 +5,7 @@ import { authService } from '../services/api';
 import '../styles/variables.css';
 
 export default function LoginPage() {
-  const { login, user } = useAuth();
+  const { login, register, user } = useAuth();
   const navigate = useNavigate();
   const [isRegister, setIsRegister] = useState(false);
   const [formData, setFormData] = useState({
@@ -61,19 +61,24 @@ export default function LoginPage() {
     setErrors({});
 
     try {
+      console.log('Submitting login form...'); // Debug log
       if (isRegister) {
-        await authService.register({
+        console.log('Calling register...'); // Debug log
+        await register({
           name: formData.name,
           email: formData.email,
           password: formData.password
         });
       } else {
-        await authService.login({
+        console.log('Calling login with:', { email: formData.email, password: '***' }); // Debug log
+        await login({
           email: formData.email,
           password: formData.password
         });
+        console.log('Login call completed'); // Debug log
       }
     } catch (error) {
+      console.log('Login error in page:', error); // Debug log
       const message = error.response?.data?.message || 'An error occurred';
       setErrors({ submit: message });
     } finally {
