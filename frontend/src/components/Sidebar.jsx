@@ -32,11 +32,11 @@ export default function Sidebar() {
   ];
 
   const navItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: '📊' },
-    { id: 'goals', label: 'Goals', icon: '🎯' },
-    { id: 'analytics', label: 'Analytics', icon: '📈' },
-    { id: 'contexts', label: 'Contexts', icon: '📂' },
-    { id: 'settings', label: 'Settings', icon: '⚙️' }
+    { id: 'dashboard', label: 'Dashboard', icon: '' },
+    { id: 'goals', label: 'Goals', icon: '' },
+    { id: 'analytics', label: 'Analytics', icon: '' },
+    { id: 'contexts', label: 'Contexts', icon: '' },
+    { id: 'settings', label: 'Settings', icon: '' }
   ];
 
   const isMobile = windowWidth < 768;

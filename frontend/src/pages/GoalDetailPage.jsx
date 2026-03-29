@@ -21,6 +21,11 @@ export default function GoalDetailPage() {
 
   useEffect(() => {
     const fetchGoal = async () => {
+      if (!id || id === 'undefined') {
+        navigate('/dashboard');
+        return;
+      }
+      
       try {
         const response = await goalsService.getById(id);
         setGoal(response.data);
@@ -35,14 +40,14 @@ export default function GoalDetailPage() {
           tags: response.data.tags.join(', ')
         });
       } catch (error) {
-        console.error('Error fetching goal:', error);
+        navigate('/dashboard');
       } finally {
         setLoading(false);
       }
     };
 
     fetchGoal();
-  }, [id]);
+  }, [id, navigate]);
 
   const handleUpdate = (field, value) => {
     setEditForm({ ...editForm, [field]: value });

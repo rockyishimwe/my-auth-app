@@ -152,14 +152,14 @@ export default function GoalsListPage() {
             }}
           >
             <option value="">All Contexts</option>
-            <option value="work">Work</option>
-            <option value="health">Health</option>
-            <option value="finance">Finance</option>
-            <option value="education">Education</option>
-            <option value="personal">Personal</option>
-            <option value="relationships">Relationships</option>
-            <option value="creativity">Creativity</option>
-            <option value="travel">Travel</option>
+            <option key="work" value="work">Work</option>
+            <option key="health" value="health">Health</option>
+            <option key="finance" value="finance">Finance</option>
+            <option key="education" value="education">Education</option>
+            <option key="personal" value="personal">Personal</option>
+            <option key="relationships" value="relationships">Relationships</option>
+            <option key="creativity" value="creativity">Creativity</option>
+            <option key="travel" value="travel">Travel</option>
           </select>
 
           <select 
@@ -174,10 +174,10 @@ export default function GoalsListPage() {
             }}
           >
             <option value="">All Status</option>
-            <option value="active">Active</option>
-            <option value="in-progress">In Progress</option>
-            <option value="completed">Completed</option>
-            <option value="archived">Archived</option>
+            <option key="active" value="active">Active</option>
+            <option key="in-progress" value="in-progress">In Progress</option>
+            <option key="completed" value="completed">Completed</option>
+            <option key="archived" value="archived">Archived</option>
           </select>
 
           <select 
@@ -192,10 +192,10 @@ export default function GoalsListPage() {
             }}
           >
             <option value="">All Priorities</option>
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-            <option value="critical">Critical</option>
+            <option key="low" value="low">Low</option>
+            <option key="medium" value="medium">Medium</option>
+            <option key="high" value="high">High</option>
+            <option key="critical" value="critical">Critical</option>
           </select>
 
           <input 
@@ -398,14 +398,14 @@ function GoalForm({ onSubmit, onCancel }) {
               fontSize: 'var(--font-base)'
             }}
           >
-            <option value="work">Work</option>
-            <option value="health">Health</option>
-            <option value="finance">Finance</option>
-            <option value="education">Education</option>
-            <option value="personal">Personal</option>
-            <option value="relationships">Relationships</option>
-            <option value="creativity">Creativity</option>
-            <option value="travel">Travel</option>
+            <option key="work" value="work">Work</option>
+            <option key="health" value="health">Health</option>
+            <option key="finance" value="finance">Finance</option>
+            <option key="education" value="education">Education</option>
+            <option key="personal" value="personal">Personal</option>
+            <option key="relationships" value="relationships">Relationships</option>
+            <option key="creativity" value="creativity">Creativity</option>
+            <option key="travel" value="travel">Travel</option>
           </select>
         </div>
 
@@ -425,10 +425,10 @@ function GoalForm({ onSubmit, onCancel }) {
               fontSize: 'var(--font-base)'
             }}
           >
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-            <option value="critical">Critical</option>
+            <option key="low" value="low">Low</option>
+            <option key="medium" value="medium">Medium</option>
+            <option key="high" value="high">High</option>
+            <option key="critical" value="critical">Critical</option>
           </select>
         </div>
       </div>

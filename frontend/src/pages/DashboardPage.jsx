@@ -78,7 +78,7 @@ export default function DashboardPage() {
             cursor: 'pointer',
             transition: 'var(--transition-fast)'
           }}
-          onClick={() => handleCreateGoal({ title: '', context: 'personal', priority: 'medium' })}
+          onClick={() => handleCreateGoal({ title: 'New Goal', context: 'personal', priority: 'medium' })}
         >
           + New Goal
         </button>

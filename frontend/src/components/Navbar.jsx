@@ -24,7 +24,7 @@ export default function Navbar({ user, onLogout }) {
             onChange={(e) => setSearchQuery(e.target.value)}
             className={styles.searchInput}
           />
-          <span className={styles.searchIcon}>🔍</span>
+          <span className={styles.searchIcon}></span>
         </div>
       </div>
 
